@@ -7,8 +7,10 @@ public class GameManager : Singleton<GameManager>
 {
     // Event
     public UnityEvent OnScoreChange;
+    public UnityEvent OnLifeChange;
 
     public int _score = 0;
+    public int _life = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -26,5 +28,23 @@ public class GameManager : Singleton<GameManager>
     {
         _score += amount;
         OnScoreChange?.Invoke();
+    }
+
+    public void SetMaxLife(int amount)
+    {
+        _life = amount;
+        OnLifeChange?.Invoke();
+    }
+
+    public void AddLife(int amount)
+    {
+        _life += amount;
+        OnLifeChange?.Invoke();
+    }
+
+    public void LoseLife(int amount)
+    {
+        _life -= amount;
+        OnLifeChange?.Invoke();
     }
 }

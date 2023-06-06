@@ -1,18 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class Player : Singleton<Player>
 {
     private bool _kill = false;
+    private int startingLife = 3;
+    private int _randHealthGain = 0;
 
+    [SerializeField] public Slider slider;
     [SerializeField] private TextMeshProUGUI loseText;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        GameManager.Instance.SetMaxLife(startingLife);
     }
 
     // Update is called once per frame
@@ -33,8 +37,22 @@ public class Player : Singleton<Player>
                 GameManager.Instance.AddScore(1);
 
                 _kill = false;
+
+                _randHealthGain = Random.Range(0, 100);
+
+                if (_randHealthGain <= 100)
+                {
+                    GameManager.Instance.AddLife(1);
+                    startingLife++;
+                }
             }
             else
+            {
+                GameManager.Instance.LoseLife(1);
+                startingLife--;
+            }
+
+            if (startingLife <= 0)
             {
                 loseText.SetText("GAME OVER");
                 Destroy(gameObject);
