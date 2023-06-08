@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3888298817980401895}
   - component: {fileID: 2030267514091011226}
   - component: {fileID: 2126389348966616255}
-  - component: {fileID: 5403707804176716179}
+  - component: {fileID: 9179959181469196553}
   m_Layer: 0
   m_Name: Cloud
   m_TagString: Untagged
@@ -183,7 +183,7 @@ MonoBehaviour:
   m_EnableTangents: 0
   m_GeometryCached: 0
   m_UTess2D: 0
---- !u!114 &5403707804176716179
+--- !u!114 &9179959181469196553
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -195,4 +195,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad4856e467ce79b498dc35c25bfeea4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
+  speed: 1

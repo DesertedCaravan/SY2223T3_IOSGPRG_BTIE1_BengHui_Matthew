@@ -6,10 +6,10 @@ using UnityEngine.UI;
 public class ArrowManager : Singleton<ArrowManager>
 {
     [SerializeField] private Image image;
-    [SerializeField] private Sprite[] sprites; // is static, won't add/remove in real time
-    // List<Sprite> sprites; is dynamic
+    [SerializeField] private Sprite[] sprites; // is static and won't add/remove in real time, while "List<Sprite> sprites" is is dynamic
 
-    [SerializeField] private bool _inRange;
+    private bool _gameOn = false;
+    private bool _coroutine = false;
 
     int _colorSwitch;
     int _previousArrow = 0;
@@ -17,26 +17,29 @@ public class ArrowManager : Singleton<ArrowManager>
 
     bool _arrowSwitch;
 
-    // float timer;
-
-    private void Start()
+    void Update()
     {
-       StartCoroutine(CO_Timer());
+        if (_gameOn == true)
+        {
+            StartCoroutine(CO_Timer());
+
+            _gameOn = false;
+        }
     }
 
-    // Update is called once per frame
-    private void Update()
+    public void GameOn()
     {
+        _gameOn = true;
     }
 
-    public void PlayerInRange()
+    public void CorouteOn()
     {
-        _inRange = true;
+        _coroutine = true;
     }
 
-    public void PlayerOutRange()
+    public void CoroutePause()
     {
-        _inRange = false;
+        _coroutine = false;
     }
 
     public int GetArrowDirection()
@@ -51,9 +54,7 @@ public class ArrowManager : Singleton<ArrowManager>
 
     private IEnumerator CO_Timer()
     {
-        // Debug.Log("First Call");
-
-        while (!_inRange)
+        while (_coroutine)
         {
             yield return new WaitForSeconds(1.0f);
 
@@ -81,21 +82,6 @@ public class ArrowManager : Singleton<ArrowManager>
             image.sprite = sprites[_currentArrow];
 
             _previousArrow = _currentArrow;
-            
-            // Debug.Log("Delayed Call");
         }
-
-        // image.sprite = sprites[0];
     }
 }
-
-// Unused Code
-/*
-        timer += Time.deltaTime;
-
-        if (timer > 1)
-        {
-            Debug.Log("Tick");
-            timer = 0;
-        }
- */

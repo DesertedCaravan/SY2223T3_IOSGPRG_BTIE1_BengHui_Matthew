@@ -6,58 +6,96 @@ using TMPro;
 
 public class Player : Singleton<Player>
 {
-    private bool _kill = false;
-    private int startingLife = 3;
-    private int _randHealthGain = 0;
+    [SerializeField] private TextMeshProUGUI eventText;
 
-    [SerializeField] public Slider slider;
-    [SerializeField] private TextMeshProUGUI loseText;
+    public AudioSource audioSource;
+    public AudioClip destroyEnemy;
+    public AudioClip hurt;
+    public AudioClip powerUp;
+
+    private bool _kill = false;
+    private bool _superMode = false;
+    private int _startingLife = 3;
+    private int _randHealthGain = 0;
+    private int _gaugeFill = 5;
 
     // Start is called before the first frame update
     void Start()
     {
-        GameManager.Instance.SetMaxLife(startingLife);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Enemy")
         {
-            if (_kill == true)
+            if (_kill == true || _superMode == true)
             {
-                // Debug.Log(other.name);
+                audioSource.PlayOneShot(destroyEnemy);
+
                 Destroy(other.gameObject);
                 SpawnManager.Instance.RemoveEnemyFromList(other.gameObject);
+
                 GameManager.Instance.AddScore(1);
 
-                _kill = false;
+                if (_superMode == false)
+                {
+                    GameManager.Instance.AddGauge(_gaugeFill);
+                }
 
                 _randHealthGain = Random.Range(0, 100);
 
-                if (_randHealthGain <= 100)
+                if (_randHealthGain <= 2)
                 {
+                    audioSource.PlayOneShot(powerUp);
+                    StartCoroutine(CO_LifeGainText());
                     GameManager.Instance.AddLife(1);
-                    startingLife++;
+                    _startingLife++;
                 }
+
+                _kill = false;
             }
             else
             {
+                audioSource.PlayOneShot(hurt);
                 GameManager.Instance.LoseLife(1);
-                startingLife--;
+                _startingLife--;
             }
 
-            if (startingLife <= 0)
+            if (_startingLife <= 0)
             {
-                loseText.SetText("GAME OVER");
-                Destroy(gameObject);
+                audioSource.PlayOneShot(hurt);
+                gameObject.SetActive(false);
+                UIManager.Instance.GameOverScreen();
             }
         }
+    }
+
+    public void StartingDefault()
+    {
+        _startingLife = 3;
+        _gaugeFill = 5;
+
+        UIManager.Instance.StartGame();
+        GameManager.Instance.SetMaxLife(_startingLife);
+    }
+
+    public void StartingTank()
+    {
+        _startingLife = 5;
+        _gaugeFill = 5;
+
+        UIManager.Instance.StartGame();
+        GameManager.Instance.SetMaxLife(_startingLife);
+    }
+
+    public void StartingSpeed()
+    {
+        _startingLife = 3;
+        _gaugeFill = 10;
+
+        UIManager.Instance.StartGame();
+        GameManager.Instance.SetMaxLife(_startingLife);
     }
 
     public void CorrectSwipe()
@@ -70,13 +108,34 @@ public class Player : Singleton<Player>
         _kill = false;
     }
 
-    /*
-    private void OnCollisionEnter(Collision collision) // the script is detecting this object type
+    public void ActivateSuperMode()
     {
-        if (collision.gameObject.tag == "Enemy")
-        {
-            Destroy(gameObject, 0.0f);
-        }
+        _superMode = true;
+        StartCoroutine(CO_SuperModeText());
     }
-    */
+
+    public void DeactivateSuperMode()
+    {
+        StartCoroutine(CO_DeactivateDelay());
+    }
+
+    private IEnumerator CO_LifeGainText()
+    {
+        eventText.SetText("Life Gained!");
+        yield return new WaitForSeconds(2.0f);
+        eventText.SetText("");
+    }
+
+    private IEnumerator CO_SuperModeText()
+    {
+        eventText.SetText("Dash Activated!");
+        yield return new WaitForSeconds(3.0f);
+        eventText.SetText("");
+    }
+
+    private IEnumerator CO_DeactivateDelay()
+    {
+        yield return new WaitForSeconds(1.0f);
+        _superMode = false;
+    }
 }

@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class SwipeDetection : MonoBehaviour
+public class SwipeDetection : Singleton<SwipeDetection>
 {
     [SerializeField] private TextMeshProUGUI debugText;
 
     // Coordinates on the Touch Screen
     private Vector2 _initialTouchPosition;
     private Vector2 _endTouchPosition;
+
+    private bool _gameStart = true;
 
     // Update is called once per frame
     void Update()
@@ -26,12 +28,44 @@ public class SwipeDetection : MonoBehaviour
             Touch touch = Input.GetTouch(0); // get first touch
             _endTouchPosition = touch.position;
 
-            CheckSwipe();
+            // (0, 0) is located at the bottomleft corner of the screen
+            if (_endTouchPosition.x <= 500.0f && _endTouchPosition.y <= 350.0f)
+            {
+                GameManager.Instance.SuperMode();
+            }
+            else
+            {
+                CheckSwipe();
+            }
+
+            if ((_endTouchPosition.x >= 260.0f && _endTouchPosition.x <= 850.0f) && _gameStart == true)
+            {
+                if (_endTouchPosition.y >= 1300.0f && _endTouchPosition.y <= 1500.0f)
+                {
+                    UIManager.Instance.DefaultSelected();
+                }
+                else if (_endTouchPosition.y >= 1000.0f && _endTouchPosition.y <= 1200.0f)
+                {
+                    UIManager.Instance.TankSelected();
+                }
+                else if (_endTouchPosition.y >= 700.0f && _endTouchPosition.y <= 900.0f)
+                {
+                    UIManager.Instance.SpeedSelected();
+                }
+
+                _gameStart = false;
+            }
+
+            if ((_endTouchPosition.x >= 260.0f && _endTouchPosition.x <= 850.0f) && (_endTouchPosition.y >= 400.0f && _endTouchPosition.y <= 600.0f))
+            {
+                GameManager.Instance.RestartGame();
+            }
         }
     }
 
     private void CheckSwipe()
     {
+        int _getDirection = 5;
         int _directionCheck = ArrowManager.Instance.GetArrowDirection();
         bool _switchCheck = ArrowManager.Instance.GetArrowSwitch();
 
@@ -41,79 +75,45 @@ public class SwipeDetection : MonoBehaviour
         if (_initialTouchPosition.x < _endTouchPosition.x && xAbsolute > yAbsolute)
         {
             debugText.text = "Swiped Right.";
-
-            if ((_directionCheck == 3 && _switchCheck == false) || (_directionCheck == 1 && _switchCheck == true))
-            {
-                // Debug.Log("Success");
-                Player.Instance.CorrectSwipe();
-            }
-            else
-            {
-                Player.Instance.WrongSwipe();
-            }
+            _getDirection = 3;
         }
         else if (_initialTouchPosition.x > _endTouchPosition.x && xAbsolute > yAbsolute)
         {
             debugText.text = "Swiped Left.";
-
-            if ((_directionCheck == 1 && _switchCheck == false) || (_directionCheck == 3 && _switchCheck == true))
-            {
-                // Debug.Log("Success");
-                Player.Instance.CorrectSwipe();
-            }
-            else
-            {
-                Player.Instance.WrongSwipe();
-            }
+            _getDirection = 1;
         }
         else if (_initialTouchPosition.y < _endTouchPosition.y && yAbsolute > xAbsolute)
         {
             debugText.text = "Swiped Up.";
-
-            if ((_directionCheck == 2 && _switchCheck == false) || (_directionCheck == 0 && _switchCheck == true))
-            {
-                // Debug.Log("Success");
-                Player.Instance.CorrectSwipe();
-            }
-            else
-            {
-                Player.Instance.WrongSwipe();
-            }
+            _getDirection = 2;
         }
         else if (_initialTouchPosition.y > _endTouchPosition.y && yAbsolute > xAbsolute)
         {
             debugText.text = "Swiped Down.";
+            _getDirection = 0;
+        }
 
-            if ((_directionCheck == 0 && _switchCheck == false) || (_directionCheck == 2 && _switchCheck == true))
-            {
-                // Debug.Log("Success");
-                Player.Instance.CorrectSwipe();
-            }
-            else
-            {
-                Player.Instance.WrongSwipe();
-            }
+        if (_switchCheck == true && (_getDirection == 0 || _getDirection == 1))
+        {
+            _getDirection += 2;
+        }
+        else if (_switchCheck == true && (_getDirection == 2 || _getDirection == 3))
+        {
+            _getDirection -= 2;
+        }
+
+        if (_getDirection == _directionCheck)
+        {
+            Player.Instance.CorrectSwipe();
+        }
+        else
+        {
+            Player.Instance.WrongSwipe();
         }
     }
-}
 
-// Unused Code
-/*
-        float distance = Vector2.Distance(initialTouchPosition, endTouchPosition);
-
-        if (distance > 0)
-
---------------------------------------------------------------------------------------
-
-    private bool PointIsOnLeft(Vector2 point1, Vector2 point2, Vector2 point3)
+    public void StartMenu()
     {
-        return (point2.x - point1.x) * (point3.y - point1.y) - (point2.y - point1.y) * (point3.x - point1.x) > 0;
+        _gameStart = true;
     }
-
---------------------------------------------------------------------------------------
-
-            // Debug.Log("Swiped Right.");
-            // Debug.Log("Swiped Left.");
-            // Debug.Log("Swiped Up.");
-            // Debug.Log("Swiped Down.");
-*/
+}
