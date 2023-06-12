@@ -13,13 +13,13 @@ public class GameManager : Singleton<GameManager>
     public UnityEvent OnLifeChange;
     [SerializeField] public Slider dashSlider;
     [SerializeField] public Image dashGauge;
+    [SerializeField] public Button dashButton;
 
     public AudioSource audioSource;
     public AudioClip gaugeFill;
 
     public int _score = 0;
     public int _life = 0;
-    public bool _gaugeMax = false;
     public bool _gaugeDeplete = false;
 
     private void Start()
@@ -31,7 +31,7 @@ public class GameManager : Singleton<GameManager>
     {
         if (_gaugeDeplete == true)
         {
-            DepleteGauge(0.05f);
+            DepleteGauge(0.25f);
         }
     }
 
@@ -46,14 +46,14 @@ public class GameManager : Singleton<GameManager>
     {
         dashSlider.value += amount;
 
-        if (dashSlider.value >= 100 && _gaugeMax == false)
+        if (dashSlider.value >= 100)
         {
             dashSlider.value = 100;
 
-            _gaugeMax = true;
-
             dashGauge.color = new Color(1.0f, 1.0f, 0.0f);
             audioSource.PlayOneShot(gaugeFill);
+
+            dashButton.gameObject.SetActive(true);
         }
     }
 
@@ -69,7 +69,7 @@ public class GameManager : Singleton<GameManager>
 
             SpawnManager.Instance.DeactivateSuperMode();
             EnvironmentSpawner.Instance.DeactivateSuperMode();
-            Player.Instance.DeactivateSuperMode();
+            UIManager.Instance.DeactivateSuperMode();
         }
     }
 
@@ -93,16 +93,13 @@ public class GameManager : Singleton<GameManager>
 
     public void SuperMode()
     {
-        if (_gaugeMax == true)
-        {
-            _gaugeMax = false;
+        dashButton.gameObject.SetActive(false);
 
-            Player.Instance.ActivateSuperMode();
-            EnvironmentSpawner.Instance.ActivateSuperMode();
-            SpawnManager.Instance.ActivateSuperMode();
+        UIManager.Instance.ActivateSuperMode();
+        EnvironmentSpawner.Instance.ActivateSuperMode();
+        SpawnManager.Instance.ActivateSuperMode();
 
-            _gaugeDeplete = true;
-        }
+        _gaugeDeplete = true;
     }
 
     public void SetMaxLife(int amount)
@@ -125,10 +122,6 @@ public class GameManager : Singleton<GameManager>
 
     public void RestartGame()
     {
-        if (_life <= 0)
-        {
-            UIManager.Instance.StartMenu();
-            SwipeDetection.Instance.StartMenu();
-        }
+        UIManager.Instance.StartMenu();
     }
 }

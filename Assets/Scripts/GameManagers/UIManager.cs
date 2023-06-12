@@ -12,21 +12,25 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private TextMeshProUGUI scoreDisplay;
     [SerializeField] private TextMeshProUGUI eventText;
     [SerializeField] private TextMeshProUGUI arrowText;
-    [SerializeField] private Image arrow;
+    [SerializeField] private Image arrowImage;
     [SerializeField] private Slider dashSlider;
+    [SerializeField] private Button dashButton;
 
     [SerializeField] private Player player;
     [SerializeField] private Button retryButton;
+
+    public bool _gameStart = false;
 
     // Start is called before the first frame update
     void Start()
     {
         StartMenu();
 
-        GameManager.Instance.OnScoreChange.AddListener(UpdateScoreDisplay); // No need to change inspector
+        // No need to change inspector
+        GameManager.Instance.OnScoreChange.AddListener(UpdateScoreDisplay);
         UpdateScoreDisplay();
 
-        GameManager.Instance.OnLifeChange.AddListener(UpdateLifeDisplay); // No need to change inspector
+        GameManager.Instance.OnLifeChange.AddListener(UpdateLifeDisplay);
         UpdateLifeDisplay();
     }
 
@@ -38,37 +42,47 @@ public class UIManager : Singleton<UIManager>
         scoreDisplay.gameObject.SetActive(false);
         eventText.gameObject.SetActive(false);
         arrowText.gameObject.SetActive(false);
-        arrow.gameObject.SetActive(false);
+        arrowImage.gameObject.SetActive(false);
         dashSlider.gameObject.SetActive(false);
+        dashButton.gameObject.SetActive(false);
 
         retryButton.gameObject.SetActive(false);
+    }
+    
+    public bool GetGameState()
+    {
+        return _gameStart;
     }
 
     public void DefaultSelected()
     {
-        Player.Instance.StartingDefault();
+        Player.Instance.StartGame(0);
     }
 
     public void TankSelected()
     {
-        Player.Instance.StartingTank();
+        Player.Instance.StartGame(1);
     }
 
     public void SpeedSelected()
     {
-        Player.Instance.StartingSpeed();
+        Player.Instance.StartGame(2);
     }
 
     public void StartGame()
     {
+        _gameStart = true;
+
         characterSelectText.gameObject.SetActive(false);
         
         lifeDisplay.gameObject.SetActive(true);
         scoreDisplay.gameObject.SetActive(true);
         eventText.gameObject.SetActive(true);
         arrowText.gameObject.SetActive(true);
-        arrow.gameObject.SetActive(true);
+        arrowImage.gameObject.SetActive(true);
+
         dashSlider.gameObject.SetActive(true);
+        dashButton.gameObject.SetActive(false);
 
         player.gameObject.SetActive(true);
         retryButton.gameObject.SetActive(false);
@@ -82,9 +96,9 @@ public class UIManager : Singleton<UIManager>
         EnvironmentSpawner.Instance.GameOn();
         ArrowManager.Instance.GameOn();
 
-        SpawnManager.Instance.CorouteOn();
-        EnvironmentSpawner.Instance.CorouteOn();
-        ArrowManager.Instance.CorouteOn();
+        SpawnManager.Instance.GameStart();
+        EnvironmentSpawner.Instance.GameStart();
+        ArrowManager.Instance.GameStart();
     }
 
     public void UpdateScoreDisplay()
@@ -97,13 +111,40 @@ public class UIManager : Singleton<UIManager>
         lifeDisplay.SetText(string.Format("Life: {0}", GameManager.Instance._life));
     }
 
+    public void RevealArrow()
+    {
+        arrowImage.gameObject.SetActive(true);
+    }
+    public void HideArrow()
+    {
+        arrowImage.gameObject.SetActive(false);
+    }
+
+    public void LifeGain()
+    {
+        StartCoroutine(CO_LifeGainText());
+    }
+
+    public void ActivateSuperMode()
+    {
+        Player.Instance.SuperModeOn();
+        StartCoroutine(CO_SuperModeText());
+    }
+
+    public void DeactivateSuperMode()
+    {
+        StartCoroutine(CO_DeactivateDelay());
+    }
+
     public void GameOverScreen()
     {
-        SpawnManager.Instance.CoroutePause();
-        EnvironmentSpawner.Instance.CoroutePause();
-        ArrowManager.Instance.CoroutePause();
+        _gameStart = false;
 
-        SpawnManager.Instance.RemoveAllEnemies();
+        arrowText.gameObject.SetActive(false);
+
+        SpawnManager.Instance.GamePause();
+        EnvironmentSpawner.Instance.GamePause();
+        ArrowManager.Instance.GamePause();
 
         StartCoroutine(CO_ResetDelay());
     }
@@ -113,6 +154,26 @@ public class UIManager : Singleton<UIManager>
         eventText.SetText("Get Ready...");
         yield return new WaitForSeconds(2.0f);
         eventText.SetText("");
+    }
+
+    private IEnumerator CO_LifeGainText()
+    {
+        eventText.SetText("Life Gained!");
+        yield return new WaitForSeconds(2.0f);
+        eventText.SetText("");
+    }
+
+    private IEnumerator CO_SuperModeText()
+    {
+        eventText.SetText("Dash Activated!");
+        yield return new WaitForSeconds(3.0f);
+        eventText.SetText("");
+    }
+
+    private IEnumerator CO_DeactivateDelay()
+    {
+        yield return new WaitForSeconds(1.0f);
+        Player.Instance.SuperModeOff();
     }
 
     private IEnumerator CO_ResetDelay()

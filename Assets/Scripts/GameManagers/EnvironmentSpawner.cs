@@ -12,8 +12,7 @@ public class EnvironmentSpawner : Singleton<EnvironmentSpawner>
     private Vector3 windowPosition;
     private Vector3 cloudPosition;
 
-    private bool _gameOn = false;
-    private bool _coroutine = false;
+    private bool _active = false;
 
     float _xPosCloud;
     bool _superModeWindow = false;
@@ -21,30 +20,20 @@ public class EnvironmentSpawner : Singleton<EnvironmentSpawner>
     float _windowSpawnRate = 1.5f;
     float _cloudSpawnRate = 2.5f;
 
-    void Update()
+    public void GameStart()
     {
-        if (_gameOn == true)
-        {
-            StartCoroutine(CO_Window());
-            StartCoroutine(CO_Cloud());
-
-            _gameOn = false;
-        }
+        StartCoroutine(CO_Window());
+        StartCoroutine(CO_Cloud());
     }
 
     public void GameOn()
     {
-        _gameOn = true;
+        _active = true;
     }
 
-    public void CorouteOn()
+    public void GamePause()
     {
-        _coroutine = true;
-    }
-
-    public void CoroutePause()
-    {
-        _coroutine = false;
+        _active = false;
     }
 
     public void RemoveWindowFromList(GameObject item)
@@ -68,7 +57,7 @@ public class EnvironmentSpawner : Singleton<EnvironmentSpawner>
 
     private IEnumerator CO_Window()
     {
-        while (_coroutine)
+        while (_active)
         {
             yield return new WaitForSeconds(_windowSpawnRate);
 
@@ -101,7 +90,7 @@ public class EnvironmentSpawner : Singleton<EnvironmentSpawner>
 
     private IEnumerator CO_Cloud()
     {
-        while (_coroutine)
+        while (_active)
         {
             yield return new WaitForSeconds(_cloudSpawnRate);
 

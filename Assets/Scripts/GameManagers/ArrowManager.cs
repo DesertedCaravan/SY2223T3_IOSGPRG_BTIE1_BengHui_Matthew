@@ -8,8 +8,7 @@ public class ArrowManager : Singleton<ArrowManager>
     [SerializeField] private Image image;
     [SerializeField] private Sprite[] sprites; // is static and won't add/remove in real time, while "List<Sprite> sprites" is is dynamic
 
-    private bool _gameOn = false;
-    private bool _coroutine = false;
+    private bool _active = false;
 
     int _colorSwitch;
     int _previousArrow = 0;
@@ -17,29 +16,19 @@ public class ArrowManager : Singleton<ArrowManager>
 
     bool _arrowSwitch;
 
-    void Update()
+    public void GameStart()
     {
-        if (_gameOn == true)
-        {
-            StartCoroutine(CO_Timer());
-
-            _gameOn = false;
-        }
+        StartCoroutine(CO_Timer());
     }
 
     public void GameOn()
     {
-        _gameOn = true;
+        _active = true;
     }
 
-    public void CorouteOn()
+    public void GamePause()
     {
-        _coroutine = true;
-    }
-
-    public void CoroutePause()
-    {
-        _coroutine = false;
+        _active = false;
     }
 
     public int GetArrowDirection()
@@ -54,19 +43,21 @@ public class ArrowManager : Singleton<ArrowManager>
 
     private IEnumerator CO_Timer()
     {
-        while (_coroutine)
+        while (_active)
         {
             yield return new WaitForSeconds(1.0f);
 
             _colorSwitch = Random.Range(0, 4);
 
-            if (_colorSwitch == 0) // 25% chance of being red
+            // 25% chance of being red
+            if (_colorSwitch == 0)
             {
                 image.color = new Color(255, 0, 0);
 
                 _arrowSwitch = true;
             }
-            else // 75% chance of being green
+            // 75% chance of being green
+            else
             {
                 image.color = new Color(0, 255, 0);
 

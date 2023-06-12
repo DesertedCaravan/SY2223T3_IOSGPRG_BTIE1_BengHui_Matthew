@@ -48,7 +48,7 @@ public class Player : Singleton<Player>
                 if (_randHealthGain <= 2)
                 {
                     audioSource.PlayOneShot(powerUp);
-                    StartCoroutine(CO_LifeGainText());
+                    UIManager.Instance.LifeGain();
                     GameManager.Instance.AddLife(1);
                     _startingLife++;
                 }
@@ -71,28 +71,19 @@ public class Player : Singleton<Player>
         }
     }
 
-    public void StartingDefault()
+    public void StartGame(int selection)
     {
         _startingLife = 3;
         _gaugeFill = 5;
 
-        UIManager.Instance.StartGame();
-        GameManager.Instance.SetMaxLife(_startingLife);
-    }
-
-    public void StartingTank()
-    {
-        _startingLife = 5;
-        _gaugeFill = 5;
-
-        UIManager.Instance.StartGame();
-        GameManager.Instance.SetMaxLife(_startingLife);
-    }
-
-    public void StartingSpeed()
-    {
-        _startingLife = 3;
-        _gaugeFill = 10;
+        if (selection == 1)
+        {
+            _startingLife = 5;
+        }
+        else if (selection == 2)
+        {
+            _gaugeFill = 10;
+        }
 
         UIManager.Instance.StartGame();
         GameManager.Instance.SetMaxLife(_startingLife);
@@ -108,34 +99,13 @@ public class Player : Singleton<Player>
         _kill = false;
     }
 
-    public void ActivateSuperMode()
+    public void SuperModeOn()
     {
         _superMode = true;
-        StartCoroutine(CO_SuperModeText());
     }
 
-    public void DeactivateSuperMode()
+    public void SuperModeOff()
     {
-        StartCoroutine(CO_DeactivateDelay());
-    }
-
-    private IEnumerator CO_LifeGainText()
-    {
-        eventText.SetText("Life Gained!");
-        yield return new WaitForSeconds(2.0f);
-        eventText.SetText("");
-    }
-
-    private IEnumerator CO_SuperModeText()
-    {
-        eventText.SetText("Dash Activated!");
-        yield return new WaitForSeconds(3.0f);
-        eventText.SetText("");
-    }
-
-    private IEnumerator CO_DeactivateDelay()
-    {
-        yield return new WaitForSeconds(1.0f);
         _superMode = false;
     }
 }

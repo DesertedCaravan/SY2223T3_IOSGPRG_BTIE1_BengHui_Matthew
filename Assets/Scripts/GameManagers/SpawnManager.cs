@@ -1,49 +1,53 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SpawnManager : Singleton<SpawnManager>
 {
     [SerializeField] private GameObject enemyPrefab;
-    [SerializeField] private Transform spawnedParent; // create parent for the spawned enemies
+    // create parent for the spawned enemies
+    [SerializeField] private Transform enemyParent;
     [SerializeField] private List<GameObject> enemies;
 
-    private bool _gameOn = false;
-    private bool _coroutine = false;
+    /*
+    [SerializeField] private GameObject arrowPrefab;
+    [SerializeField] private Transform arrowParent;
+    [SerializeField] private List<GameObject> arrows;
+    */
+
+    private bool _active = false;
 
     bool _superMode = false;
     bool _superModeSetUp = false;
     float _spawnRate = 1.0f;
 
-    void Update()
+    public void GameStart()
     {
-        if (_gameOn == true)
-        {
-            StartCoroutine(CO_EnemySpawn());
-
-            _gameOn = false;
-        }
+        StartCoroutine(CO_Spawner());
     }
 
     public void GameOn()
     {
-        _gameOn = true;
+        _active = true;
     }
 
-    public void CorouteOn()
+    public void GamePause()
     {
-        _coroutine = true;
-    }
-
-    public void CoroutePause()
-    {
-        _coroutine = false;
+        _active = false;
     }
 
     public void RemoveEnemyFromList(GameObject enemy)
     {
         enemies.Remove(enemy);
     }
+
+    /*
+    public void RemoveArrowFromList(GameObject arrow)
+    {
+        arrows.Remove(arrow);
+    }
+    */
 
     public void ActivateSuperMode()
     {
@@ -59,7 +63,7 @@ public class SpawnManager : Singleton<SpawnManager>
         _spawnRate = 1.0f;
     }
 
-    private void SpawnEnemies(int count)
+    private void Spawn(int count)
     {
         for (int i = 0; i < count; i++)
         {
@@ -69,6 +73,11 @@ public class SpawnManager : Singleton<SpawnManager>
                 {
                     Enemy previousEnemy = enemies[j].GetComponent<Enemy>();
                     previousEnemy.ActivateSuperMode();
+
+                    /*
+                    Arrow previousArrow = arrows[j].GetComponent<Arrow>();
+                    previousArrow.ActivateSuperMode();
+                    */
                 }
 
                 _superMode = false;
@@ -80,7 +89,8 @@ public class SpawnManager : Singleton<SpawnManager>
 
             if (_xPositionSelect == 0)
             {
-                _randomXPosition = -1.5f; // 33% chance to be aerial
+                // 33% chance to be aerial
+                _randomXPosition = -1.5f;
             }
             else
             {
@@ -88,36 +98,41 @@ public class SpawnManager : Singleton<SpawnManager>
             }
 
             Vector3 randomPosition = new Vector3(_randomXPosition, 7.0f, -0.5f);
-
             GameObject enemy = Instantiate(enemyPrefab, randomPosition, Quaternion.identity);
 
-            enemy.transform.parent = spawnedParent;
-
+            enemy.transform.parent = enemyParent;
             enemies.Add(enemy);
+
+            /*
+            randomPosition = new Vector3(-0.35f, 7.0f, -0.5f);
+            GameObject arrow = Instantiate(arrowPrefab, randomPosition, Quaternion.identity);
+
+            arrow.transform.parent = arrowParent;
+            arrows.Add(arrow);
+            */
 
             if (_superModeSetUp == true)
             {
                 Enemy enemyScript = enemy.GetComponent<Enemy>();
                 enemyScript.ActivateSuperMode();
+
+                /*
+                Arrow arrowScript = arrow.GetComponent<Arrow>();
+                arrowScript.ActivateSuperMode();
+                */
             }
         }
     }
 
-    public void RemoveAllEnemies()
+    private IEnumerator CO_Spawner()
     {
-        for (int i = 0; i < enemies.Count; i++)
+        while (_active)
         {
-            enemies.RemoveAt(i);
-        }
-    }
+            _spawnRate = Random.Range(1, 3);
 
-    private IEnumerator CO_EnemySpawn()
-    {
-        while (_coroutine)
-        {
             yield return new WaitForSeconds(_spawnRate);
 
-            SpawnEnemies(1);
+            Spawn(1);
         }
     }
 }
