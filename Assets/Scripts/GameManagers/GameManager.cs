@@ -31,7 +31,7 @@ public class GameManager : Singleton<GameManager>
     {
         if (_gaugeDeplete == true)
         {
-            DepleteGauge(0.25f);
+            DepleteGauge(0.05f);
         }
     }
 
@@ -118,6 +118,11 @@ public class GameManager : Singleton<GameManager>
     {
         _life -= amount;
         OnLifeChange?.Invoke();
+    }
+
+    public bool GetGaugeState()
+    {
+        return _gaugeDeplete;
     }
 
     public void RestartGame()

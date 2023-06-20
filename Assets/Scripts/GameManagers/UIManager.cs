@@ -71,8 +71,6 @@ public class UIManager : Singleton<UIManager>
 
     public void StartGame()
     {
-        _gameStart = true;
-
         characterSelectText.gameObject.SetActive(false);
         
         lifeDisplay.gameObject.SetActive(true);
@@ -99,6 +97,8 @@ public class UIManager : Singleton<UIManager>
         SpawnManager.Instance.GameStart();
         EnvironmentSpawner.Instance.GameStart();
         ArrowManager.Instance.GameStart();
+
+        _gameStart = true;
     }
 
     public void UpdateScoreDisplay()

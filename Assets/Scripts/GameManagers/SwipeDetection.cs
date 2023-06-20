@@ -34,9 +34,10 @@ public class SwipeDetection : Singleton<SwipeDetection>
 
             CheckSwipe();
 
-            bool check = UIManager.Instance.GetGameState();
+            bool _checkStart = UIManager.Instance.GetGameState();
+            bool _gaugeState = GameManager.Instance.GetGaugeState();
 
-            if (_dashState == false && check == true)
+            if ((_checkStart == true) && (_dashState == false && _gaugeState == false))
             {
                 StartCoroutine(CO_Dash());
             }

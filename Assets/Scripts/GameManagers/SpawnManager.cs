@@ -10,12 +10,6 @@ public class SpawnManager : Singleton<SpawnManager>
     [SerializeField] private Transform enemyParent;
     [SerializeField] private List<GameObject> enemies;
 
-    /*
-    [SerializeField] private GameObject arrowPrefab;
-    [SerializeField] private Transform arrowParent;
-    [SerializeField] private List<GameObject> arrows;
-    */
-
     private bool _active = false;
 
     bool _superMode = false;
@@ -42,13 +36,6 @@ public class SpawnManager : Singleton<SpawnManager>
         enemies.Remove(enemy);
     }
 
-    /*
-    public void RemoveArrowFromList(GameObject arrow)
-    {
-        arrows.Remove(arrow);
-    }
-    */
-
     public void ActivateSuperMode()
     {
         _superMode = true;
@@ -73,11 +60,6 @@ public class SpawnManager : Singleton<SpawnManager>
                 {
                     Enemy previousEnemy = enemies[j].GetComponent<Enemy>();
                     previousEnemy.ActivateSuperMode();
-
-                    /*
-                    Arrow previousArrow = arrows[j].GetComponent<Arrow>();
-                    previousArrow.ActivateSuperMode();
-                    */
                 }
 
                 _superMode = false;
@@ -103,23 +85,10 @@ public class SpawnManager : Singleton<SpawnManager>
             enemy.transform.parent = enemyParent;
             enemies.Add(enemy);
 
-            /*
-            randomPosition = new Vector3(-0.35f, 7.0f, -0.5f);
-            GameObject arrow = Instantiate(arrowPrefab, randomPosition, Quaternion.identity);
-
-            arrow.transform.parent = arrowParent;
-            arrows.Add(arrow);
-            */
-
             if (_superModeSetUp == true)
             {
                 Enemy enemyScript = enemy.GetComponent<Enemy>();
                 enemyScript.ActivateSuperMode();
-
-                /*
-                Arrow arrowScript = arrow.GetComponent<Arrow>();
-                arrowScript.ActivateSuperMode();
-                */
             }
         }
     }
