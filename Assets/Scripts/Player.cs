@@ -1,111 +1,62 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
-public class Player : Singleton<Player>
+public class Player : Unit
 {
-    [SerializeField] private TextMeshProUGUI eventText;
+    // Reference: https://www.youtube.com/watch?v=TPzOgMfoCGY
+    public MovementJoystick movementJoystick;
+    private Rigidbody2D rb;
 
+    [Header("Sounds")]
     public AudioSource audioSource;
-    public AudioClip destroyEnemy;
-    public AudioClip hurt;
-    public AudioClip powerUp;
+    public AudioClip ammoCollect;
+    public AudioClip hurtEnemy;
 
-    private bool _kill = false;
-    private bool _superMode = false;
-    private int _startingLife = 3;
-    private int _randHealthGain = 0;
-    private int _gaugeFill = 5;
-
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
+        Initialize("Player", 100, 5);
+
+        rb = GetComponent<Rigidbody2D>();
         audioSource = GetComponent<AudioSource>();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void Update()
     {
-        if (other.gameObject.tag == "Enemy")
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
-            if (_kill == true || _superMode == true)
-            {
-                audioSource.PlayOneShot(destroyEnemy);
-
-                Destroy(other.gameObject);
-                SpawnManager.Instance.RemoveEnemyFromList(other.gameObject);
-
-                GameManager.Instance.AddScore(1);
-
-                if (_superMode == false)
-                {
-                    GameManager.Instance.AddGauge(_gaugeFill);
-                }
-
-                _randHealthGain = Random.Range(0, 100);
-
-                if (_randHealthGain <= 2)
-                {
-                    audioSource.PlayOneShot(powerUp);
-                    UIManager.Instance.LifeGain();
-                    GameManager.Instance.AddLife(1);
-                    _startingLife++;
-                }
-
-                _kill = false;
-            }
-            else
-            {
-                audioSource.PlayOneShot(hurt);
-                GameManager.Instance.LoseLife(1);
-                _startingLife--;
-            }
-
-            if (_startingLife <= 0)
-            {
-                audioSource.PlayOneShot(hurt);
-                gameObject.SetActive(false);
-                UIManager.Instance.GameOverScreen();
-            }
+            Shoot();
         }
     }
 
-    public void StartGame(int selection)
+    private void FixedUpdate()
     {
-        _startingLife = 3;
-        _gaugeFill = 5;
-
-        if (selection == 1)
+        if (movementJoystick.joystickVec.y != 0)
         {
-            _startingLife = 5;
+            rb.velocity = new Vector2(movementJoystick.joystickVec.x * _speed, movementJoystick.joystickVec.y * _speed);
         }
-        else if (selection == 2)
+        else
         {
-            _gaugeFill = 10;
+            rb.velocity = Vector2.zero;
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Only possible if the Game Object that collides with Player has the Health class attached to it.
+        Pickup pickup = collision.gameObject.GetComponent<Pickup>();
+        Health health = collision.gameObject.GetComponent<Health>();
+
+        if (pickup != null)
+        {
+            audioSource.PlayOneShot(ammoCollect);
         }
 
-        UIManager.Instance.StartGame();
-        GameManager.Instance.SetMaxLife(_startingLife);
-    }
+        if (health != null)
+        {
+            health.TakeDamage(5);
+            audioSource.PlayOneShot(hurtEnemy);
+        }
 
-    public void CorrectSwipe()
-    {
-        _kill = true;
-    }
-
-    public void WrongSwipe()
-    {
-        _kill = false;
-    }
-
-    public void SuperModeOn()
-    {
-        _superMode = true;
-    }
-
-    public void SuperModeOff()
-    {
-        _superMode = false;
     }
 }
