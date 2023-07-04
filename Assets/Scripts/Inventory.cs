@@ -21,30 +21,28 @@ public class Inventory : MonoBehaviour
 
     public int _healthKitsCarry = 0;
 
-    public void AddPistolAmmo(int amount)
+    public void AddAmmo(int gunType, int amount)
     {
-        _pistolAmmoCarry += amount;
-
-        _pistolAmmoCarry = Mathf.Min(_pistolAmmoCarry, _maxPistolAmmoCarry);
+        if (gunType == 1)
+        {
+            _pistolAmmoCarry += amount;
+            _pistolAmmoCarry = Mathf.Min(_pistolAmmoCarry, _maxPistolAmmoCarry);
+        }
+        else if (gunType == 2)
+        {
+            _automaticRifleAmmoCarry += amount;
+            _automaticRifleAmmoCarry = Mathf.Min(_automaticRifleAmmoCarry, _maxAutomaticRifleAmmoCarry);
+        }
+        else if (gunType == 3)
+        {
+            _shotgunAmmoCarry += amount;
+            _shotgunAmmoCarry = Mathf.Min(_shotgunAmmoCarry, _maxShotgunAmmoCarry);
+        }
     }
 
     public void AddGun()
     {
 
-    }
-
-    public void AddAutomaticRifleAmmo(int amount)
-    {
-        _automaticRifleAmmoCarry += amount;
-
-        _automaticRifleAmmoCarry = Mathf.Min(_automaticRifleAmmoCarry, _maxAutomaticRifleAmmoCarry);
-    }
-
-    public void AddShotgunAmmo(int amount)
-    {
-        _shotgunAmmoCarry += amount;
-
-        _shotgunAmmoCarry = Mathf.Min(_shotgunAmmoCarry, _maxShotgunAmmoCarry);
     }
 
     public void ReloadGun()

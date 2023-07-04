@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1732663110563099610}
   - component: {fileID: 8526426557911616383}
-  - component: {fileID: 5671880294759546044}
+  - component: {fileID: -3192187033734824932}
   - component: {fileID: 2921185265507043416}
   m_Layer: 0
   m_Name: Medkit
@@ -86,7 +86,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5671880294759546044
+--- !u!114 &-3192187033734824932
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -95,10 +95,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5399535493343131565}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33137048ee0b7fd40b031f1b29ab0dd4, type: 3}
+  m_Script: {fileID: 11500000, guid: aede7a54d96c6004780b573123072d1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _ammoType: 3
+  _ammoType: 0
 --- !u!61 &2921185265507043416
 BoxCollider2D:
   m_ObjectHideFlags: 0

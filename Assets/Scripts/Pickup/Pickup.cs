@@ -18,23 +18,15 @@ public class Pickup : MonoBehaviour
     {
         Inventory inventory = collision.gameObject.GetComponent<Inventory>();
 
-        if (_ammoType == AmmoType.Pistol)
+        if (inventory != null)
         {
-            inventory.AddPistolAmmo(15);
+            PickupItem(inventory);
         }
-        else if (_ammoType == AmmoType.AutomaticRifle)
-        {
-            inventory.AddAutomaticRifleAmmo(30);
-        }
-        else if (_ammoType == AmmoType.Shotgun)
-        {
-            inventory.AddShotgunAmmo(2);
-        }
-        else if (_ammoType == AmmoType.HealthKit)
-        {
-            inventory.AddHealthKit();
-        }
+    }
 
+    public virtual void PickupItem(Inventory inventory)
+    {
+        Sound.Instance.PickupItem();
         Debug.Log($"{_ammoType} ammo collected");
         Destroy(gameObject);
     }

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 49763771778644423}
   - component: {fileID: 8352382321663521989}
-  - component: {fileID: 8748408393142393726}
+  - component: {fileID: -7371860300790677026}
   - component: {fileID: -7019980069361882088}
   m_Layer: 0
   m_Name: 9mmPickup
@@ -86,7 +86,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8748408393142393726
+--- !u!114 &-7371860300790677026
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -95,7 +95,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2669125992402399630}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33137048ee0b7fd40b031f1b29ab0dd4, type: 3}
+  m_Script: {fileID: 11500000, guid: c2256edb77c684a48b93c51edb59ee2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _ammoType: 0

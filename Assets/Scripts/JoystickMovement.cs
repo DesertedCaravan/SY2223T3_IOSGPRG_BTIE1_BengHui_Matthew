@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class MovementJoystick : MonoBehaviour
+public class JoystickMovement : MonoBehaviour
 {
     // Reference: https://www.youtube.com/watch?v=TPzOgMfoCGY
     public GameObject joystick;
