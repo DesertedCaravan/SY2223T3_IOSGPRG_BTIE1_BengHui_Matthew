@@ -24,7 +24,7 @@ public class JoystickMovement : MonoBehaviour
         // Area that Joystick can move around in
         // * means bigger area
         // / means smaller area
-        joystickRadius = joystickBG.GetComponent<RectTransform>().sizeDelta.y * 2;
+        joystickRadius = joystickBG.GetComponent<RectTransform>().sizeDelta.y * 1.5f;
     }
 
     public void PointerDown()

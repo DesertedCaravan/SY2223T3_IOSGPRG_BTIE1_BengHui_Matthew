@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PistolAmmo : Pickup
+public class ShotgunAmmo : Pickup
 {
     public override void PickupItem(Inventory inventory)
     {
-        inventory.AddAmmo(1, 15);
+        Sound.Instance.PickupItem();
+
+        inventory.AddAmmo(3, 2);
 
         base.PickupItem(inventory);
     }

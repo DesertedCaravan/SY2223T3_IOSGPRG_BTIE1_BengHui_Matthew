@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spawner : MonoBehaviour
+public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private GameObject _bossPrefab;
@@ -27,8 +27,8 @@ public class Spawner : MonoBehaviour
         {
             randomX = Random.Range(-5, 5);
             randomY = Random.Range(-5, 5);
-            position.x = randomX;
-            position.y = randomY;
+            position.x = gameObject.transform.position.x + randomX;
+            position.y = gameObject.transform.position.y + randomY;
 
             GameObject unitGO = Instantiate(prefab, position, Quaternion.identity);
             unitGO.transform.parent = transform;

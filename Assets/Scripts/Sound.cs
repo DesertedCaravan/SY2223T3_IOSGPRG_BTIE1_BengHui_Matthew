@@ -9,6 +9,15 @@ public class Sound : Singleton<Sound>
     public AudioClip pickupItem;
     public AudioClip hurtEnemy;
 
+    public AudioClip pistolReload;
+    public AudioClip pistolShoot;
+
+    public AudioClip automaticRifleReload;
+    public AudioClip automaticRifleShoot;
+
+    public AudioClip shotgunReload;
+    public AudioClip shotgunShoot;
+
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -22,5 +31,34 @@ public class Sound : Singleton<Sound>
     public void HurtEnemy()
     {
         audioSource.PlayOneShot(hurtEnemy);
+    }
+
+    public void PistolReload()
+    {
+        audioSource.PlayOneShot(pistolReload);
+    }
+
+    public void PistolShoot()
+    {
+        audioSource.PlayOneShot(pistolShoot);
+    }
+    public void AutomaticRifleReload()
+    {
+        audioSource.PlayOneShot(automaticRifleReload);
+    }
+
+    public void AutomaticRifleShoot()
+    {
+        audioSource.PlayOneShot(automaticRifleShoot);
+    }
+
+    public void ShotgunReload()
+    {
+        audioSource.PlayOneShot(shotgunReload);
+    }
+
+    public void ShotgunShoot()
+    {
+        audioSource.PlayOneShot(shotgunShoot);
     }
 }

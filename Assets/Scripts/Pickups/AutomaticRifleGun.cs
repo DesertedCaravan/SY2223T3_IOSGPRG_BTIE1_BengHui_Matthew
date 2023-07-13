@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HealthKit : Pickup
+public class AutomaticRifleGun : Pickup
 {
     public override void PickupItem(Inventory inventory)
     {
-        inventory.AddHealthKit();
+        Sound.Instance.AutomaticRifleReload();
+
+        inventory.AddGun(2);
 
         base.PickupItem(inventory);
     }

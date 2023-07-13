@@ -2,17 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum AmmoType
+public enum PickupType
 {
-    Pistol,
-    AutomaticRifle,
-    Shotgun,
+    PistolGun,
+    AutomaticRifleGun,
+    ShotgunGun,
+    PistolAmmo,
+    AutomaticRifleAmmo,
+    ShotgunAmmo,
     HealthKit
 }
 
 public class Pickup : MonoBehaviour
 {
-    [SerializeField] private AmmoType _ammoType;
+    [SerializeField] private PickupType _pickupType;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -26,8 +29,7 @@ public class Pickup : MonoBehaviour
 
     public virtual void PickupItem(Inventory inventory)
     {
-        Sound.Instance.PickupItem();
-        Debug.Log($"{_ammoType} ammo collected");
+        Debug.Log($"{_pickupType} collected");
         Destroy(gameObject);
     }
 }
