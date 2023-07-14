@@ -17,7 +17,12 @@ public class PickupSpawner : MonoBehaviour
     [SerializeField] private List<GameObject> _ammo = new List<GameObject>();
     [SerializeField] private List<GameObject> _medkit = new List<GameObject>();
 
-    private void Start()
+    public virtual void Start()
+    {
+        Initialize();
+    }
+
+    public void Initialize()
     {
         _guns.Add(_pistolPrefab);
         _guns.Add(_automaticRiflePrefab);
@@ -29,10 +34,12 @@ public class PickupSpawner : MonoBehaviour
         _ammo.Add(_automaticRifleAmmoPrefab);
         _ammo.Add(_shotgunAmmoPrefab);
 
-        SpawnPickups(4, _guns, _medkit, _ammo);
+        int amount = Random.Range(3, 6);
+
+        SpawnPickups(amount, _guns, _medkit, _ammo);
     }
 
-    private void SpawnPickups(int count, List<GameObject> guns, List<GameObject> medkit, List<GameObject> ammo)
+    public void SpawnPickups(int count, List<GameObject> guns, List<GameObject> medkit, List<GameObject> ammo)
     {
         float randomX;
         float randomY;
@@ -45,8 +52,8 @@ public class PickupSpawner : MonoBehaviour
 
         for (int i = 0; i < count; i++)
         {
-            randomX = Random.Range(-5, 5);
-            randomY = Random.Range(-5, 5);
+            randomX = Random.Range(-3, 3);
+            randomY = Random.Range(-3, 3);
             position.x = gameObject.transform.position.x + randomX;
             position.y = gameObject.transform.position.y + randomY;
 

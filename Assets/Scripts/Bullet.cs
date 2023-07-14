@@ -26,11 +26,18 @@ public class Bullet : MonoBehaviour
 	{
 		// Only possible if the Game Object that collides with Player has the Health class attached to it.
 		Health health = collision.gameObject.GetComponent<Health>();
+		BarrelSpawner barrelSpawner = collision.gameObject.GetComponent<BarrelSpawner>();
 
 		if (health != null)
 		{
 			Sound.Instance.HurtEnemy();
 			health.TakeDamage(10);
+		}
+
+		if (barrelSpawner != null)
+		{
+			Sound.Instance.HurtEnemy();
+			barrelSpawner.TakeDamage();
 		}
 
 		// GameObject e = Instantiate(explosion, this.transform.position, Quaternion.identity);

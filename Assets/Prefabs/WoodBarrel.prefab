@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2081529345137182723}
   - component: {fileID: 527522459825174542}
   - component: {fileID: 6382520006750599968}
+  - component: {fileID: 8453734728607852758}
   m_Layer: 0
   m_Name: WoodBarrel
   m_TagString: Untagged
@@ -101,3 +102,25 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.71
+--- !u!114 &8453734728607852758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5552801003698638909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1fe7b12f1c388e428e360937ec30af3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pistolPrefab: {fileID: 1632942031485092252, guid: 7175ee97991c2624ca57a814933f3dc5, type: 3}
+  _automaticRiflePrefab: {fileID: 675086086768890087, guid: 783946566ac84864182cef90cf98723d, type: 3}
+  _shotgunPrefab: {fileID: 2307285022321566841, guid: 6cb72c1504b4708419f6e6f6a171fe41, type: 3}
+  _medkitPrefab: {fileID: 5399535493343131565, guid: 9086e6beb362ba94ab776439822dc071, type: 3}
+  _pistolAmmoPrefab: {fileID: 2669125992402399630, guid: 8716182101ba5c845935f021f018968a, type: 3}
+  _automaticRifleAmmoPrefab: {fileID: 1915027623285418076, guid: 07c3f38f0c22d4d4fa7d56ca528bc956, type: 3}
+  _shotgunAmmoPrefab: {fileID: 5166281003328044656, guid: c0058c64a31df6e49a2d5850143e69f7, type: 3}
+  _guns: []
+  _ammo: []
+  _medkit: []

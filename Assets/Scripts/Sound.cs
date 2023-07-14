@@ -18,6 +18,9 @@ public class Sound : Singleton<Sound>
     public AudioClip shotgunReload;
     public AudioClip shotgunShoot;
 
+    public AudioClip fullAmmo;
+    public AudioClip barrelBreak;
+
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -42,6 +45,7 @@ public class Sound : Singleton<Sound>
     {
         audioSource.PlayOneShot(pistolShoot);
     }
+
     public void AutomaticRifleReload()
     {
         audioSource.PlayOneShot(automaticRifleReload);
@@ -60,5 +64,15 @@ public class Sound : Singleton<Sound>
     public void ShotgunShoot()
     {
         audioSource.PlayOneShot(shotgunShoot);
+    }
+
+    public void FullAmmo()
+    {
+        audioSource.PlayOneShot(fullAmmo);
+    }
+
+    public void BarrelBreak()
+    {
+        audioSource.PlayOneShot(barrelBreak);
     }
 }
