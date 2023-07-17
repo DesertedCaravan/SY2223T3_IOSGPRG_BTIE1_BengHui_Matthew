@@ -80,9 +80,16 @@ public class Health : MonoBehaviour
         PlayerRapidFire player2 = collision.gameObject.GetComponent<PlayerRapidFire>();
         PlayerShotgunSpread player3 = collision.gameObject.GetComponent<PlayerShotgunSpread>();
 
-        if (player1 != null || player2 != null || player3 != null)
+        EnemyPistolBullet enemy1 = collision.gameObject.GetComponent<EnemyPistolBullet>();
+        EnemyRapidFire enemy2 = collision.gameObject.GetComponent<EnemyRapidFire>();
+        EnemyShotgunSpread enemy3 = collision.gameObject.GetComponent<EnemyShotgunSpread>();
+
+        if (player1 != null || player2 != null || player3 != null || enemy1 != null || enemy2 != null || enemy3 != null)
         {
-            GameManager.Instance.IncreaseHighScore();
+            if (player1 != null || player2 != null || player3 != null)
+            {
+                GameManager.Instance.IncreaseHighScore();
+            }
 
             TakeDamage(10);
 
