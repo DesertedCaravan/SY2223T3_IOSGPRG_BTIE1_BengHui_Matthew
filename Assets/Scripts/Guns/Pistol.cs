@@ -10,7 +10,7 @@ public class Pistol : Gun
         {
             if (Inventory.Instance.CheckClip(1) == true)
             {
-                Sound.Instance.PistolShoot();
+                Sound.Instance.PlayerGun(1);
 
                 GameObject b = Instantiate(bullet, turret.transform.position, turret.transform.rotation);
 
@@ -22,7 +22,7 @@ public class Pistol : Gun
             {
                 Debug.Log("Out of Ammo!");
 
-                Sound.Instance.PistolReload();
+                Sound.Instance.PlayerGun(2);
             }
             else if (Inventory.Instance.CheckClip(1) == false)
             {
@@ -34,5 +34,41 @@ public class Pistol : Gun
     public override void Reload()
     {
         Inventory.Instance.ReloadGun(1);
+    }
+
+    public override void EnemyShoot()
+    {
+        if (_enemyFireOn == true)
+        {
+            Sound.Instance.EnemyGun(audioSource, 1);
+
+            GameObject b = Instantiate(bullet, turret.transform.position, turret.transform.rotation);
+
+            _enemyCount++;
+
+            _enemyFireOn = false;
+            StartCoroutine(EnemyStopFire());
+        }
+
+        if (_enemyFireOn == true && _enemyCount >= 15)
+        {
+            _enemyFireOn = false;
+            StartCoroutine(EnemyReload());
+        }
+    }
+
+    IEnumerator EnemyStopFire()
+    {
+        yield return new WaitForSecondsRealtime(0.5f);
+        _enemyFireOn = true;
+    }
+
+    IEnumerator EnemyReload()
+    {
+        Sound.Instance.EnemyGun(audioSource, 2);
+        yield return new WaitForSecondsRealtime(3.0f);
+        _enemyFireOn = true;
+
+        _enemyCount = 0;
     }
 }

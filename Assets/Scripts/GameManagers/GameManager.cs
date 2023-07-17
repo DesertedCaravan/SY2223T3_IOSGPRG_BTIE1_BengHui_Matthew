@@ -8,14 +8,22 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager>
 {
     // Event
+    public UnityEvent OnHighScoreChange;
+    public UnityEvent OnSurvivorsChange;
+
+    public UnityEvent OnMedKitChange;
     public UnityEvent OnAmmoChange;
     public UnityEvent OnClipChange;
     public UnityEvent OnExcessChange;
+    public UnityEvent OnWinStateChange;
 
     // [SerializeField] public Slider lifeSlider;
 
-    // public int _score = 0;
-    // public int _life = 0;
+    public int _highScore = 0;
+    public int _survivors = 20;
+
+    public int _life = 0;
+    public int _medKit = 0;
 
     public int _currentClip = 0;
     public int _currentExcess = 0;
@@ -31,6 +39,38 @@ public class GameManager : Singleton<GameManager>
     public int _pistolClip = 0;
     public int _automaticRifleClip = 0;
     public int _shotgunClip = 0;
+
+    public int _enemyTally = 0;
+    public string _winState;
+
+    public void IncreaseHighScore()
+    {
+        _highScore += 10;
+        OnHighScoreChange?.Invoke();
+    }
+
+    public void DecreaseSurvivors()
+    {
+        _survivors--;
+        OnSurvivorsChange?.Invoke();
+
+        if (_survivors <= 0)
+        {
+            GameOver();
+        }
+    }
+
+    public void AddMedKit()
+    {
+        _medKit++;
+        OnMedKitChange?.Invoke();
+    }
+
+    public void UseMedKit()
+    {
+        _medKit--;
+        OnMedKitChange?.Invoke();
+    }
 
     public void SetCurrentClip(int gunType)
     {
@@ -116,5 +156,29 @@ public class GameManager : Singleton<GameManager>
         {
             _shotgunExcess = amount;
         }
+    }
+
+    public void Reloading()
+    {
+        _winState = "Reloading...";
+        OnWinStateChange?.Invoke();
+    }
+
+    public void ReloadingComplete()
+    {
+        _winState = " ";
+        OnWinStateChange?.Invoke();
+    }
+
+    public void Winner()
+    {
+        _winState = "YOU WIN";
+        OnWinStateChange?.Invoke();
+    }
+
+    public void GameOver()
+    {
+        _winState = "GAME OVER";
+        OnWinStateChange?.Invoke();
     }
 }

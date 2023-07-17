@@ -6,7 +6,7 @@ public class AutomaticRifleGun : Pickup
 {
     public override void PickupItem(Inventory inventory)
     {
-        Sound.Instance.AutomaticRifleReload();
+        Sound.Instance.PlayerGun(4);
 
         inventory.AddGun(2);
 

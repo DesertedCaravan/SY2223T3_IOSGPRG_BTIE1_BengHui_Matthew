@@ -4,10 +4,9 @@ using UnityEngine;
 
 public class Sound : Singleton<Sound>
 {
-    [Header("Sounds")]
-    public AudioSource audioSource;
+    [Header("Ammo Sounds")]
+    public AudioSource playerSource;
     public AudioClip pickupItem;
-    public AudioClip hurtEnemy;
 
     public AudioClip pistolReload;
     public AudioClip pistolShoot;
@@ -19,60 +18,168 @@ public class Sound : Singleton<Sound>
     public AudioClip shotgunShoot;
 
     public AudioClip fullAmmo;
+
+    [Header("Target Sounds")]
+    public AudioClip hurtPlayer;
+    public AudioClip hurtEnemy;
+    public AudioClip deadPlayer;
+    public AudioClip deadEnemy;
+
+    public AudioClip heal;
+    public AudioClip denyHeal;
+
+    public AudioClip killAnnouncer1;
+    public AudioClip killAnnouncer2;
+    public AudioClip playerDeathAnnouncer;
+
+    [Header("Obstacle Sounds")]
     public AudioClip barrelBreak;
+
+    public AudioClip woodenBulletHit;
+    public AudioClip stoneBulletHit;
+    public AudioClip metalBulletHit;
+    public AudioClip plasticBulletHit;
 
     private void Start()
     {
-        audioSource = GetComponent<AudioSource>();
+        playerSource = GetComponent<AudioSource>();
     }
 
     public void PickupItem()
     {
-        audioSource.PlayOneShot(pickupItem);
+        playerSource.PlayOneShot(pickupItem);
     }
 
-    public void HurtEnemy()
+    public void PlayerGun(int type)
     {
-        audioSource.PlayOneShot(hurtEnemy);
-    }
-
-    public void PistolReload()
-    {
-        audioSource.PlayOneShot(pistolReload);
-    }
-
-    public void PistolShoot()
-    {
-        audioSource.PlayOneShot(pistolShoot);
-    }
-
-    public void AutomaticRifleReload()
-    {
-        audioSource.PlayOneShot(automaticRifleReload);
-    }
-
-    public void AutomaticRifleShoot()
-    {
-        audioSource.PlayOneShot(automaticRifleShoot);
-    }
-
-    public void ShotgunReload()
-    {
-        audioSource.PlayOneShot(shotgunReload);
-    }
-
-    public void ShotgunShoot()
-    {
-        audioSource.PlayOneShot(shotgunShoot);
+        if (type == 1)
+        {
+            playerSource.PlayOneShot(pistolShoot);
+        }
+        else if (type == 2)
+        {
+            playerSource.PlayOneShot(pistolReload);
+        }
+        else if (type == 3)
+        {
+            playerSource.PlayOneShot(automaticRifleShoot);
+        }
+        else if (type == 4)
+        {
+            playerSource.PlayOneShot(automaticRifleReload);
+        }
+        else if (type == 5)
+        {
+            playerSource.PlayOneShot(shotgunShoot);
+        }
+        else if (type == 6)
+        {
+            playerSource.PlayOneShot(shotgunReload);
+        }
     }
 
     public void FullAmmo()
     {
-        audioSource.PlayOneShot(fullAmmo);
+        playerSource.PlayOneShot(fullAmmo);
+    }
+
+    public void EnemyGun(AudioSource enemySource, int type)
+    {
+        if (type == 1)
+        {
+            enemySource.PlayOneShot(pistolShoot);
+        }
+        else if (type == 2)
+        {
+            enemySource.PlayOneShot(pistolReload);
+        }
+        else if (type == 3)
+        {
+            enemySource.PlayOneShot(automaticRifleShoot);
+        }
+        else if (type == 4)
+        {
+            enemySource.PlayOneShot(automaticRifleReload);
+        }
+        else if (type == 5)
+        {
+            enemySource.PlayOneShot(shotgunShoot);
+        }
+        else if (type == 6)
+        {
+            enemySource.PlayOneShot(shotgunReload);
+        }
+    }
+
+    public void HurtPlayer()
+    {
+        playerSource.PlayOneShot(hurtPlayer);
+    }
+
+    public void HurtEnemy()
+    {
+        playerSource.PlayOneShot(hurtEnemy);
+    }
+
+    public void DeadPlayer()
+    {
+        playerSource.PlayOneShot(deadPlayer);
+    }
+
+    public void DeadEnemy()
+    {
+        playerSource.PlayOneShot(deadEnemy);
+    }
+
+    public void Heal()
+    {
+        playerSource.PlayOneShot(heal);
+    }
+
+    public void DenyHeal()
+    {
+        playerSource.PlayOneShot(denyHeal);
     }
 
     public void BarrelBreak()
     {
-        audioSource.PlayOneShot(barrelBreak);
+        playerSource.PlayOneShot(barrelBreak);
+    }
+
+    public void ObstacleBulletHit(AudioSource environmentSource, int type)
+    {
+        if (type == 1)
+        {
+            environmentSource.PlayOneShot(woodenBulletHit);
+        }
+        else if (type == 2)
+        {
+            environmentSource.PlayOneShot(stoneBulletHit);
+        }
+        else if (type == 3)
+        {
+            environmentSource.PlayOneShot(metalBulletHit);
+        }
+        else if (type == 4)
+        {
+            environmentSource.PlayOneShot(plasticBulletHit);
+        }
+    }
+
+    public void KillAnnouncer(int type)
+    {
+        if (type == 1)
+        {
+            playerSource.PlayOneShot(killAnnouncer1);
+        }
+        else if (type == 2)
+        {
+            playerSource.PlayOneShot(killAnnouncer2);
+        }
+    }
+
+    public void PlayerDeathAnnouncer()
+    {
+        playerSource.PlayOneShot(playerDeathAnnouncer);
     }
 }

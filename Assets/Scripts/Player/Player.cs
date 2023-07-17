@@ -8,14 +8,14 @@ public class Player : Unit
     {
         Initialize("Player", 100, 5);
     }
+}
 
-    private void Update()
+/*
+private void Update()
+{
+    if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
     {
-        /*
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
-        {
-            Shoot();
-        }
-        */
+        Shoot();
     }
 }
+*/

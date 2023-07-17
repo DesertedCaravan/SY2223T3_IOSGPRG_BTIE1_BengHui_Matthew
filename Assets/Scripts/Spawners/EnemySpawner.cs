@@ -25,8 +25,8 @@ public class EnemySpawner : MonoBehaviour
 
         for (int i = 0; i < count; i++)
         {
-            randomX = Random.Range(-5, 5);
-            randomY = Random.Range(-5, 5);
+            randomX = Random.Range(-3, 3);
+            randomY = Random.Range(-3, 3);
             position.x = gameObject.transform.position.x + randomX;
             position.y = gameObject.transform.position.y + randomY;
 

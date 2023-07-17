@@ -16,8 +16,6 @@ public class Unit : MonoBehaviour
 
     [SerializeField] public float _speed;
 
-    [SerializeField] private Gun gun;
-
     public virtual void Initialize(string name, int maxHealth, float speed)
     {
         gameObject.name = name;
@@ -37,27 +35,7 @@ public class Unit : MonoBehaviour
         Debug.Log($"{_name} has been spawned.");
     }
 
-    public void Shoot()
-    {
-        Debug.Log($"{_name} is shooting.");
-
-        if (gun != null)
-        {
-            gun.Shoot();
-        }
-    }
-
-    private void Reload()
-    {
-        Debug.Log($"{_name} is reloading.");
-
-        if (gun != null)
-        {
-            gun.Reload();
-        }
-    }
-
-    public virtual void Movement()
+    public virtual void Fire()
     {
     }
 }

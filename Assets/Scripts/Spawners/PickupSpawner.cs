@@ -20,6 +20,8 @@ public class PickupSpawner : MonoBehaviour
     public virtual void Start()
     {
         Initialize();
+
+        RespawnPickup();
     }
 
     public void Initialize()
@@ -73,8 +75,22 @@ public class PickupSpawner : MonoBehaviour
             }
 
             GameObject pickupGO = Instantiate(chosenPrefab, position, Quaternion.identity);
-            pickupGO.transform.parent = transform;
+            // pickupGO.transform.parent = transform;
+            ChangeParent(pickupGO);
+        }
+    }
 
+    public virtual void ChangeParent(GameObject pickup)
+    {
+        pickup.transform.parent = transform;
+    }
+
+    IEnumerator RespawnPickup()
+    {
+        while (true)
+        {
+            Initialize();
+            yield return new WaitForSecondsRealtime(20.0f);
         }
     }
 }

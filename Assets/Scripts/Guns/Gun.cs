@@ -11,25 +11,25 @@ public enum GunType
 
 public class Gun : MonoBehaviour
 {
+    [Header("Sounds")]
+    public AudioSource audioSource;
+
+    [Header("Universal Variables")]
+
     // Reference: https://forum.unity.com/threads/rigidbody2d-addforce.493958/#:~:text=Code%20%28csharp%29%3A%20rigidbody2D.AddForce%20%28new%20Vector2%20%280f%2C,jumpForce%29%2C%20ForceMode2D.Impulse%29%3B%20to%20make%20character%20jump.
 
     [SerializeField] public GunType _gunType;
 
-    [SerializeField] private int _clipMaxSize;
-
-    [SerializeField] public float _fireSpeed;
-    [SerializeField] public float _fireRate;
-    [SerializeField] private float _spreadAmount;
-
     [SerializeField] public GameObject bullet;
     [SerializeField] public GameObject turret;
 
-    private int _currentClip;
+    [Header("Enemy Variables")]
+    public int _enemyCount = 0;
+    public bool _enemyFireOn = true;
 
     public void Start()
     {
-        _fireSpeed = 20.0f;
-        _fireRate = 0.0f;
+        audioSource = GetComponent<AudioSource>();
     }
 
     public virtual void Shoot()
@@ -48,5 +48,9 @@ public class Gun : MonoBehaviour
     public virtual void Reload()
     {
         Debug.Log("Base gun reloading");
+    }
+
+    public virtual void EnemyShoot()
+    {
     }
 }

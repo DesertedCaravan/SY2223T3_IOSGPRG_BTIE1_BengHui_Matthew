@@ -6,7 +6,7 @@ public class ShotgunGun : Pickup
 {
     public override void PickupItem(Inventory inventory)
     {
-        Sound.Instance.ShotgunReload();
+        Sound.Instance.PlayerGun(6);
 
         inventory.AddGun(3);
 
