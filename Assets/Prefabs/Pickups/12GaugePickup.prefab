@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2365044391945376876}
   - component: {fileID: 6809979110894589621}
-  - component: {fileID: -7286751809204681711}
   - component: {fileID: -2310882081114335502}
+  - component: {fileID: 6885594906437354773}
   m_Layer: 0
   m_Name: 12GaugePickup
   m_TagString: Untagged
@@ -86,19 +86,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-7286751809204681711
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5166281003328044656}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 383975a6f7683dc47b3b0c00d99f3bdc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _pickupType: 5
 --- !u!61 &-2310882081114335502
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -125,3 +112,16 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 6.83, y: 6.83}
   m_EdgeRadius: 0
+--- !u!114 &6885594906437354773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5166281003328044656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2256edb77c684a48b93c51edb59ee2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pickupType: 5

@@ -86,12 +86,35 @@ public class Health : MonoBehaviour
 
         if (player1 != null || player2 != null || player3 != null || enemy1 != null || enemy2 != null || enemy3 != null)
         {
-            if (player1 != null || player2 != null || player3 != null)
+            if (player1 != null || player3 != null)
             {
                 GameManager.Instance.IncreaseHighScore();
+                TakeDamage(10);
+
+                if (_currentHealth > 0)
+                {
+                    Sound.Instance.HurtEnemy();
+                }
+            }
+            else if (player2 != null)
+            {
+                GameManager.Instance.IncreaseHighScore();
+                TakeDamage(15);
+
+                if (_currentHealth > 0)
+                {
+                    Sound.Instance.HurtEnemy();
+                }
             }
 
-            TakeDamage(10);
+            if (enemy1 != null || enemy3 != null)
+            {
+                TakeDamage(10);
+            }
+            else if (enemy2 != null)
+            {
+                TakeDamage(15);
+            }
 
             if (_currentHealth <= 0 && _announcerState == false)
             {

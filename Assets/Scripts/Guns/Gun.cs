@@ -23,6 +23,8 @@ public class Gun : MonoBehaviour
     [SerializeField] public GameObject bullet;
     [SerializeField] public GameObject turret;
 
+    public bool _fireOn = true;
+
     [Header("Enemy Variables")]
     public int _enemyCount = 0;
     public bool _enemyFireOn = true;
@@ -52,5 +54,6 @@ public class Gun : MonoBehaviour
 
     public virtual void EnemyShoot()
     {
+        Debug.Log("Enemy Shooting");
     }
 }

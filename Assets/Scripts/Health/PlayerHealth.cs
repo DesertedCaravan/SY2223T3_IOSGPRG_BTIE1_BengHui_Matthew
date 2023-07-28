@@ -33,7 +33,19 @@ public class PlayerHealth : Health
 
         if (enemy1 != null || enemy2 != null || enemy3 != null)
         {
-            TakeDamage(10);
+            if (enemy1 != null || enemy3 != null)
+            {
+                TakeDamage(10);
+            }
+            else if (enemy2 != null)
+            {
+                TakeDamage(15);
+            }
+
+            if (_currentHealth > 0)
+            {
+                Sound.Instance.HurtPlayer();
+            }
 
             if (_currentHealth <= 0 && _announcerState == false)
             {
@@ -49,14 +61,27 @@ public class PlayerHealth : Health
     {
         if (_deathState == false)
         {
+            PlayerMovement move = this.gameObject.GetComponent<PlayerMovement>();
+            PlayerAim aim = this.gameObject.GetComponent<PlayerAim>();
+
             Sound.Instance.DeadPlayer();
+
+            move.CallDeath();
+            aim.CallDeath();
 
             _deathState = true;
 
             GameManager.Instance.GameOver();
+            UIManager.Instance.GameOver();
 
-            this.gameObject.SetActive(false);
-            // Destroy(this.gameObject, 2.0f);
+            StartCoroutine(CO_SetDefeat());
         }
+    }
+
+    IEnumerator CO_SetDefeat()
+    {
+        yield return new WaitForSecondsRealtime(1.5f);
+
+        this.gameObject.SetActive(false);
     }
 }

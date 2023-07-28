@@ -56,7 +56,7 @@ public class GameManager : Singleton<GameManager>
 
         if (_survivors <= 0)
         {
-            GameOver();
+            Winner();
         }
     }
 
@@ -180,5 +180,10 @@ public class GameManager : Singleton<GameManager>
     {
         _winState = "GAME OVER";
         OnWinStateChange?.Invoke();
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }

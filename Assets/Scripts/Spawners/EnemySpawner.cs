@@ -5,15 +5,14 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private GameObject _enemyPrefab;
-    [SerializeField] private GameObject _bossPrefab;
+    [SerializeField] private GameObject _playerPrefab;
 
     // Unit is the parent class of all Enemy and BossEnemy
     [SerializeField] private List<Unit> _enemies;
 
     private void Start()
     {
-        SpawnEnemies(5, _enemyPrefab, "Bob", 100, 5f);
-        SpawnEnemies(1, _bossPrefab, "Bobert", 200, 2.5f);
+        SpawnEnemies(5, _enemyPrefab, "Bob", 100, 3.5f);
     }
     
     private void SpawnEnemies(int count, GameObject prefab, string name, int maxhealth, float speed)
@@ -25,8 +24,8 @@ public class EnemySpawner : MonoBehaviour
 
         for (int i = 0; i < count; i++)
         {
-            randomX = Random.Range(-3, 3);
-            randomY = Random.Range(-3, 3);
+            randomX = Random.Range(-10, 10);
+            randomY = Random.Range(-10, 10);
             position.x = gameObject.transform.position.x + randomX;
             position.y = gameObject.transform.position.y + randomY;
 
@@ -34,10 +33,13 @@ public class EnemySpawner : MonoBehaviour
             unitGO.transform.parent = transform;
 
             Unit unit = unitGO.GetComponent<Unit>();
-
             _enemies.Add(unit);
 
             unit.Initialize(name, maxhealth, speed);
+
+            EnemyMovement unitMove = unitGO.GetComponent<EnemyMovement>();
+            unitMove._playerTarget = _playerPrefab;
+            unitMove._enemyTarget = _enemyPrefab;
         }
     }
 }

@@ -4,93 +4,82 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
+    // Reference: https://discussions.unity.com/t/make-sprite-look-at-vector2-in-unity-2d/97929
+
     // Get Enemy unit._speed
     [SerializeField] private Unit unit;
-    private Rigidbody2D rb;
 
-    [SerializeField] public Unit target;
-
-    // private float _rotationSpeed;
+    [SerializeField] public GameObject _playerTarget;
+    [SerializeField] public GameObject _enemyTarget;
 
     public bool _deathState = false;
     public bool _aimSwitch = true;
 
     private float _xRotation;
-    private float _rotationChange;
+    private float _rotationChangeElapse;
 
-    private int _fireOn;
-
-    private void Start()
-    {
-        rb = GetComponent<Rigidbody2D>();
-
-        // _rotationSpeed = 5f;
-
-        StartCoroutine(FireAway());
-    }
+    private bool _spotted = false;
+    private float _trackingSpeed = 2.0f;
 
     private void LateUpdate()
     {
         if (_deathState == false)
         {
-            /*
-            Debug.Log($"Target in Range: {InRange()}");
-            // Debug.Log($"Target Spotted: {CanSeeTarget()}");
-
-            if (InRange() == true) //  && CanSeeTarget() == true // NEEDS FIXING
-            {
-                // Reference: https://discussions.unity.com/t/rotate-rigidbody2d-towards-target/126125/2
-
-                Quaternion toRotation = Quaternion.FromToRotation(target.transform.position, this.transform.position);
-                this.transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, 5f);
-                
-                Debug.Log("In Range");
-            }
-            else
-            {
-            }
-            */
-
-            if (_aimSwitch == true)
+            if (_spotted == false && _aimSwitch == true)
             {
                 _xRotation = Random.Range(0, 361);
 
-                rb.SetRotation(_xRotation);
+                transform.rotation = Quaternion.AngleAxis(_xRotation, Vector3.forward);
 
                 _aimSwitch = false;
-                StartCoroutine(ChangeAim());
-
-                Debug.Log("Firing");
+                StartCoroutine(CO_ChangeAim());
             }
 
-            transform.position += transform.up * unit._speed * Time.deltaTime;
+            if (_spotted == true)
+            {
+                Vector3 v_diff = (_playerTarget.transform.position - transform.position);
+                float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg - 90f), _trackingSpeed * Time.deltaTime);
+
+                if (InRange())
+                {
+                    unit.Fire();
+                }
+            }
+
+            transform.position += transform.up * unit._speed * Time.deltaTime; 
         }
     }
 
-    public bool InRange() // NEEDS FIXING
+    public void OnTriggerEnter2D(Collider2D trigger)
     {
-        Vector3 distance = target.transform.position - this.transform.position;
+        PlayerMovement player = trigger.gameObject.GetComponent<PlayerMovement>();
+        EnemyMovement enemy = trigger.gameObject.GetComponent<EnemyMovement>();
 
-        if (distance.magnitude < 50f) // ensures that the object stops moving up until a certain point.
+        if (player != null)
+        {
+            _spotted = true;
+        }
+    }
+
+    public void OnTriggerExit2D(Collider2D trigger)
+    {
+        PlayerMovement player = trigger.gameObject.GetComponent<PlayerMovement>();
+        EnemyMovement enemy = trigger.gameObject.GetComponent<EnemyMovement>();
+
+        if (player != null)
+        {
+            _spotted = false;
+        }
+    }
+
+    public bool InRange()
+    {
+        Vector3 distance = _playerTarget.transform.position - this.transform.position;
+
+        if (distance.magnitude < 7.5f) // ensures that the object stops moving up until a certain point.
         {
             return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    public bool CanSeeTarget() // NEEDS FIXING
-    {
-        // shoots a raycast from the target
-        RaycastHit raycastInfo;
-        Vector3 rayToTarget = target.transform.position - this.transform.position;
-
-        // if the raycast directly hits a "Player" tag, return true
-        if (Physics.Raycast(this.transform.position, rayToTarget, out raycastInfo))
-        {
-            return raycastInfo.transform.gameObject.tag == "Player";
         }
         else
         {
@@ -103,50 +92,11 @@ public class EnemyMovement : MonoBehaviour
         _deathState = true;
     }
 
-    IEnumerator ChangeAim()
+    IEnumerator CO_ChangeAim()
     {
-        _rotationChange = Random.Range(0f, 2f);
+        _rotationChangeElapse = Random.Range(0f, 2f);
 
-        yield return new WaitForSecondsRealtime(_rotationChange);
+        yield return new WaitForSecondsRealtime(_rotationChangeElapse);
         _aimSwitch = true;
     }
-
-    IEnumerator FireAway()
-    {
-        while(true)
-        {
-            _fireOn = Random.Range(1, 6);
-
-            yield return new WaitForSecondsRealtime(_fireOn);
-
-            _fireOn = Random.Range(1, 15);
-
-            for (int i = 0; i < _fireOn; i++)
-            {
-                unit.Fire();
-            }
-        }
-    }
 }
-
-/*
-    public bool _directionSwitch = true;
-
-    if (_directionSwitch == true)
-    {
-
-        _xMovement = Random.Range(-1, 2);
-        _yMovement = Random.Range(-1, 2);
-
-        rb.velocity = new Vector2(_xMovement * unit._speed, _yMovement * unit._speed);
-
-        _directionSwitch = false;
-        StartCoroutine(ChangeDirection());
-    }
-
-    IEnumerator ChangeDirection()
-    {
-        yield return new WaitForSecondsRealtime(0.1f);
-        _directionSwitch = true;
-    }
-*/

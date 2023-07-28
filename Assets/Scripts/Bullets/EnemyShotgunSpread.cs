@@ -7,7 +7,7 @@ public class EnemyShotgunSpread : Bullet
 	public override void Start()
 	{
 		_speed = 50f;
-		_scatter = Random.Range(-1, 2);
+		_scatter = Random.Range(-5, 6);
 	}
 
 	public override void Update()

@@ -6,8 +6,6 @@ public class BarrelSpawner : PickupSpawner
 {
     [Header("Barrel")]
 
-    // [SerializeField] public GameObject holder;
-
     private Vector3 scaleChange;
 
     public int _health = 40;
@@ -25,17 +23,10 @@ public class BarrelSpawner : PickupSpawner
 
         if (_health <= 0 && _destroyed == false)
         {
-            Initialize();
+            SpawnPickups(Random.Range(3, 6), 2);
             _destroyed = true;
 
             Destroy(this.gameObject);
         }
-    }
-
-    public override void ChangeParent(GameObject pickup)
-    {
-        // Transform holderTransform = holder.gameObject.GetComponent<Transform>();
-
-        // pickup.transform.parent = holderTransform;
     }
 }

@@ -23,11 +23,11 @@ public class Pickup : MonoBehaviour
 
         if (inventory != null)
         {
-            PickupItem(inventory);
+            PickupItem(inventory, _pickupType);
         }
     }
 
-    public virtual void PickupItem(Inventory inventory)
+    public virtual void PickupItem(Inventory inventory, PickupType _pickupType)
     {
         Debug.Log($"{_pickupType} collected");
         Destroy(gameObject);

@@ -7,7 +7,6 @@ public class AutomaticRifle : Gun
     // Reference: https://stackoverflow.com/questions/65622436/detecting-unity-button-being-held-down-and-not-just-pressed
 
     public bool _isHeldDown = false;
-    public bool _fireOn = true;
 
     public override void Shoot()
     {
@@ -43,7 +42,7 @@ public class AutomaticRifle : Gun
             Shoot();
 
             _fireOn = false;
-            StartCoroutine(StopFire());
+            StartCoroutine(CO_StopFire());
         }
     }
 
@@ -52,20 +51,14 @@ public class AutomaticRifle : Gun
         Inventory.Instance.ReloadGun(2);
     }
 
-    public void onPress()
+    public void OnPress()
     {
         _isHeldDown = true;
     }
 
-    public void onRelease()
+    public void OnRelease()
     {
         _isHeldDown = false;
-    }
-
-    IEnumerator StopFire()
-    {
-        yield return new WaitForSecondsRealtime(0.1f);
-        _fireOn = true;
     }
 
     public override void EnemyShoot()
@@ -79,26 +72,33 @@ public class AutomaticRifle : Gun
             _enemyCount++;
 
             _enemyFireOn = false;
-            StartCoroutine(EnemyStopFire());
+            StartCoroutine(CO_EnemyStopFire());
         }
 
         if (_enemyFireOn == true && _enemyCount >= 30)
         {
             _enemyFireOn = false;
-            StartCoroutine(EnemyReload());
+            StartCoroutine(CO_EnemyReload());
         }
     }
 
-    IEnumerator EnemyStopFire()
+    IEnumerator CO_StopFire()
     {
-        yield return new WaitForSecondsRealtime(0.2f);
+        yield return new WaitForSecondsRealtime(0.35f);
+        _fireOn = true;
+    }
+
+
+    IEnumerator CO_EnemyStopFire()
+    {
+        yield return new WaitForSecondsRealtime(0.35f);
         _enemyFireOn = true;
     }
 
-    IEnumerator EnemyReload()
+    IEnumerator CO_EnemyReload()
     {
         Sound.Instance.EnemyGun(audioSource, 4);
-        yield return new WaitForSecondsRealtime(3.0f);
+        yield return new WaitForSecondsRealtime(4.6f);
         _enemyFireOn = true;
 
         _enemyCount = 0;

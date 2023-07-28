@@ -8,6 +8,7 @@ public class UIManager : Singleton<UIManager>
 {
     [Header("Screens")]
     [SerializeField] private GameObject mainMenu;
+    [SerializeField] private GameObject quitButton;
     [SerializeField] private GameObject gameScreen;
     [SerializeField] private GameObject gameElements;
 
@@ -32,7 +33,9 @@ public class UIManager : Singleton<UIManager>
     void Start()
     {
         gameScreen.gameObject.SetActive(false);
+        quitButton.gameObject.SetActive(true);
         gameElements.gameObject.SetActive(false);
+        GameManager.Instance.ReloadingComplete();
 
         // No need to change inspector
         GameManager.Instance.OnHighScoreChange.AddListener(UpdateHighScoreDisplay);
@@ -108,8 +111,14 @@ public class UIManager : Singleton<UIManager>
     public void StartGame()
     {
         mainMenu.gameObject.SetActive(false);
+        quitButton.gameObject.SetActive(false);
         gameScreen.gameObject.SetActive(true);
         gameElements.gameObject.SetActive(true);
+    }
+
+    public void GameOver()
+    {
+        quitButton.gameObject.SetActive(true);
     }
 
     public void ActivateGun(int mode, Gun pistol, Gun automaticRifle, Gun shotgun)
@@ -132,10 +141,5 @@ public class UIManager : Singleton<UIManager>
             automaticRifle.gameObject.SetActive(false);
             shotgun.gameObject.SetActive(true);
         }
-    }
-
-    public void QuitGame()
-    {
-        Application.Quit();
     }
 }

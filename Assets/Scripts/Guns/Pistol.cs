@@ -8,7 +8,7 @@ public class Pistol : Gun
     {
         if (Inventory.Instance.CheckGun() == 1)
         {
-            if (Inventory.Instance.CheckClip(1) == true)
+            if (Inventory.Instance.CheckClip(1) == true && _fireOn == true)
             {
                 Sound.Instance.PlayerGun(1);
 
@@ -17,6 +17,9 @@ public class Pistol : Gun
                 Inventory.Instance.UseAmmo(1, 1);
 
                 Debug.Log("Single Fire");
+
+                StartCoroutine(CO_StopFire());
+                _fireOn = false;
             }
             else if (Inventory.Instance.CheckAmmo(1) == false)
             {
@@ -47,26 +50,32 @@ public class Pistol : Gun
             _enemyCount++;
 
             _enemyFireOn = false;
-            StartCoroutine(EnemyStopFire());
+            StartCoroutine(CO_EnemyStopFire());
         }
 
         if (_enemyFireOn == true && _enemyCount >= 15)
         {
             _enemyFireOn = false;
-            StartCoroutine(EnemyReload());
+            StartCoroutine(CO_EnemyReload());
         }
     }
 
-    IEnumerator EnemyStopFire()
+    IEnumerator CO_StopFire()
     {
-        yield return new WaitForSecondsRealtime(0.5f);
+        yield return new WaitForSecondsRealtime(2.16f);
+        _fireOn = true;
+    }
+
+    IEnumerator CO_EnemyStopFire()
+    {
+        yield return new WaitForSecondsRealtime(2.16f);
         _enemyFireOn = true;
     }
 
-    IEnumerator EnemyReload()
+    IEnumerator CO_EnemyReload()
     {
         Sound.Instance.EnemyGun(audioSource, 2);
-        yield return new WaitForSecondsRealtime(3.0f);
+        yield return new WaitForSecondsRealtime(4.0f);
         _enemyFireOn = true;
 
         _enemyCount = 0;

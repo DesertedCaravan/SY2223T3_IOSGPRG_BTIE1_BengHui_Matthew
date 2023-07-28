@@ -4,47 +4,28 @@ using UnityEngine;
 
 public class PickupSpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject _pistolPrefab;
-    [SerializeField] private GameObject _automaticRiflePrefab;
-    [SerializeField] private GameObject _shotgunPrefab;
-    [SerializeField] private GameObject _medkitPrefab;
-
-    [SerializeField] private GameObject _pistolAmmoPrefab;
-    [SerializeField] private GameObject _automaticRifleAmmoPrefab;
-    [SerializeField] private GameObject _shotgunAmmoPrefab;
-
-    [SerializeField] private List<GameObject> _guns = new List<GameObject>();
-    [SerializeField] private List<GameObject> _ammo = new List<GameObject>();
-    [SerializeField] private List<GameObject> _medkit = new List<GameObject>();
+    [SerializeField] private List<GameObject> _spawnGunsPrefabs;
+    [SerializeField] private List<GameObject> _spawnAmmoPrefabs;
+    [SerializeField] private GameObject _spawnMedkitPrefabs;
 
     public virtual void Start()
     {
-        Initialize();
-
-        RespawnPickup();
+        Spawn();
     }
 
-    public void Initialize()
+    public void Spawn()
     {
-        _guns.Add(_pistolPrefab);
-        _guns.Add(_automaticRiflePrefab);
-        _guns.Add(_shotgunPrefab);
-
-        _medkit.Add(_medkitPrefab);
-
-        _ammo.Add(_pistolAmmoPrefab);
-        _ammo.Add(_automaticRifleAmmoPrefab);
-        _ammo.Add(_shotgunAmmoPrefab);
-
         int amount = Random.Range(3, 6);
 
-        SpawnPickups(amount, _guns, _medkit, _ammo);
+        amount *= 28;
+
+        SpawnPickups(amount, 1);
     }
 
-    public void SpawnPickups(int count, List<GameObject> guns, List<GameObject> medkit, List<GameObject> ammo)
+    public void SpawnPickups(int count, int mode)
     {
-        float randomX;
-        float randomY;
+        float randomX = 0;
+        float randomY = 0;
         Vector3 position = new Vector3();
         position.z = 0;
 
@@ -54,28 +35,60 @@ public class PickupSpawner : MonoBehaviour
 
         for (int i = 0; i < count; i++)
         {
-            randomX = Random.Range(-3, 3);
-            randomY = Random.Range(-3, 3);
+            if (mode == 1)
+            {
+                randomX = Random.Range(-100, 100);
+                randomY = Random.Range(-50, 50);
+            }
+            else if (mode == 2)
+            {
+                randomX = Random.Range(-5, 5);
+                randomY = Random.Range(-5, 5);
+            }
+            
             position.x = gameObject.transform.position.x + randomX;
             position.y = gameObject.transform.position.y + randomY;
 
             rate = Random.Range(0, 10);
-            
-            if (rate == 0)
+
+            chosenPrefab = _spawnGunsPrefabs[0];
+
+            if (mode == 1)
             {
-                chosenPrefab = guns[Random.Range(0, guns.Count)];
+                if (rate >= 0 && rate <= 2)
+                {
+                    chosenPrefab = _spawnGunsPrefabs[Random.Range(0, _spawnGunsPrefabs.Count)];
+                }
+                else if (rate >= 3 && rate <= 9)
+                {
+                    chosenPrefab = _spawnAmmoPrefabs[Random.Range(0, _spawnAmmoPrefabs.Count)];
+                }
+
+                rate = Random.Range(0, 10);
+
+                if (rate == 0)
+                {
+                    chosenPrefab = _spawnMedkitPrefabs;
+                }
             }
-            else if (rate >= 1 && rate <= 3)
+            else if (mode == 2)
             {
-                chosenPrefab = medkit[Random.Range(0, medkit.Count)];
-            }
-            else
-            {
-                chosenPrefab = ammo[Random.Range(0, ammo.Count)];
+                if (rate == 0)
+                {
+                    chosenPrefab = _spawnGunsPrefabs[Random.Range(0, _spawnGunsPrefabs.Count)];
+                }
+                else if (rate >= 1 && rate <= 3)
+                {
+                    chosenPrefab = _spawnMedkitPrefabs;
+                }
+                else
+                {
+                    chosenPrefab = _spawnAmmoPrefabs[Random.Range(0, _spawnAmmoPrefabs.Count)];
+                }
             }
 
             GameObject pickupGO = Instantiate(chosenPrefab, position, Quaternion.identity);
-            // pickupGO.transform.parent = transform;
+
             ChangeParent(pickupGO);
         }
     }
@@ -83,14 +96,5 @@ public class PickupSpawner : MonoBehaviour
     public virtual void ChangeParent(GameObject pickup)
     {
         pickup.transform.parent = transform;
-    }
-
-    IEnumerator RespawnPickup()
-    {
-        while (true)
-        {
-            Initialize();
-            yield return new WaitForSecondsRealtime(20.0f);
-        }
     }
 }

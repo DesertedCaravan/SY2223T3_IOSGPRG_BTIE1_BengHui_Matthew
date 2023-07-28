@@ -31,6 +31,7 @@ public class Inventory : Singleton<Inventory>
 
     public bool _reloadState = false;
     public float _reloadTime = 3f;
+    public float _currentReloadTime = 0f;
 
     [Header("Current Unused Ammo")]
     public int _pistolAmmoExcess = 0;
@@ -49,126 +50,147 @@ public class Inventory : Singleton<Inventory>
         if (_reloadState == true)
         {
             GameManager.Instance.Reloading();
-            _reloadTime -= 1f * Time.deltaTime;
 
-            Debug.Log(_reloadTime);
+            _currentReloadTime -= 1f * Time.deltaTime;
 
-            if (_reloadTime <= 0f && _equippedGun == _pistolSprite)
+            if (_currentReloadTime <= 0f)
             {
-                ReloadGun(1);
-            }
-            else if (_reloadTime <= 0f && _equippedGun == _automaticRifleSprite)
-            {
-                ReloadGun(2);
-            }
-            else if (_reloadTime <= 0f && _equippedGun == _shotgunSprite)
-            {
-                ReloadGun(3);
+                if (_equippedGun == _pistolSprite)
+                {
+                    ReloadGun(1);
+                }
+                else if (_equippedGun == _automaticRifleSprite)
+                {
+                    ReloadGun(2);
+                }
+                else if (_equippedGun == _shotgunSprite)
+                {
+                    ReloadGun(3);
+                }
             }
         }
     }
 
     public void AddAmmo(int gunType, int amount)
     {
+        int _clip = 0;
+        int _maxClip = 0;
+        int _ammoExcess = 0;
+        int _ammoCarry = 0;
+        int _maxAmmoCarry = 0;
+        int _gun = 0;
+        Gun _sprite = _pistolSprite;
+
         if (gunType == 1)
         {
-            _pistolAmmoExcess += amount;
-            _pistolAmmoExcess = Mathf.Min(_pistolAmmoExcess, _maxPistolAmmoCarry - _maxPistolClip);
-            
-            if (_pistolClip == 0)
-            {
-                _pistolClip += _maxPistolClip;
-                _pistolAmmoExcess -= _maxPistolClip;
-
-                GameManager.Instance.SetClip(1, _pistolClip);
-            }
-
-            GameManager.Instance.SetExcess(1, _pistolAmmoExcess);
-
-            if (_equippedGun == _pistolSprite)
-            {
-                GameManager.Instance.SetCurrentClip(1);
-                GameManager.Instance.SetCurrentExcess(1);
-            }
-
-            if (_pistolClip < _maxPistolClip && _pistolAmmoExcess == _maxPistolAmmoCarry - _maxPistolClip)
-            {
-                Sound.Instance.FullAmmo();
-            }
-            else
-            {
-                _pistolAmmoCarry += amount;
-                _pistolAmmoCarry = Mathf.Min(_pistolAmmoCarry, _maxPistolAmmoCarry);
-            }
-
-            GameManager.Instance.SetAmmo(1, _pistolAmmoCarry);
+            _clip = _pistolClip;
+            _maxClip = _maxPistolClip;
+            _ammoExcess = _pistolAmmoExcess;
+            _ammoCarry = _pistolAmmoCarry;
+            _maxAmmoCarry = _maxPistolAmmoCarry;
+            _gun = 1;
+            _sprite = _pistolSprite;
         }
         else if (gunType == 2)
         {
-            _automaticRifleAmmoExcess += amount;
-            _automaticRifleAmmoExcess = Mathf.Min(_automaticRifleAmmoExcess, _maxAutomaticRifleAmmoCarry - _maxAutomaticRifleClip);
-
-            if (_automaticRifleClip == 0)
-            {
-                _automaticRifleClip += _maxAutomaticRifleClip;
-                _automaticRifleAmmoExcess -= _maxAutomaticRifleClip;
-
-                GameManager.Instance.SetClip(2, _automaticRifleClip);
-            }
-
-            GameManager.Instance.SetExcess(2, _automaticRifleAmmoExcess);
-
-            if (_equippedGun == _automaticRifleSprite)
-            {
-                GameManager.Instance.SetCurrentClip(2);
-                GameManager.Instance.SetCurrentExcess(2);
-            }
-
-            if (_automaticRifleClip < _maxAutomaticRifleClip && _automaticRifleAmmoExcess == _maxAutomaticRifleAmmoCarry - _maxAutomaticRifleClip)
-            {
-                Sound.Instance.FullAmmo();
-            }
-            else
-            {
-                _automaticRifleAmmoCarry += amount;
-                _automaticRifleAmmoCarry = Mathf.Min(_automaticRifleAmmoCarry, _maxAutomaticRifleAmmoCarry);
-            }
-
-            GameManager.Instance.SetAmmo(2, _automaticRifleAmmoCarry);
+            _clip = _automaticRifleClip;
+            _maxClip = _maxAutomaticRifleClip;
+            _ammoExcess = _automaticRifleAmmoExcess;
+            _ammoCarry = _automaticRifleAmmoCarry;
+            _maxAmmoCarry = _maxAutomaticRifleAmmoCarry;
+            _gun = 2;
+            _sprite = _automaticRifleSprite;
         }
         else if (gunType == 3)
         {
-            _shotgunAmmoExcess += amount;
-            _shotgunAmmoExcess = Mathf.Min(_shotgunAmmoExcess, _maxShotgunAmmoCarry - _maxShotgunClip);
+            _clip = _shotgunClip;
+            _maxClip = _maxShotgunClip;
+            _ammoExcess = _shotgunAmmoExcess;
+            _ammoCarry = _shotgunAmmoCarry;
+            _maxAmmoCarry = _maxShotgunAmmoCarry;
+            _gun = 3;
+            _sprite = _shotgunSprite;
+        }
 
-            if (_shotgunClip == 0)
+        _ammoExcess += amount;
+        _ammoExcess = Mathf.Min(_ammoExcess, _maxAmmoCarry - _clip);
+
+        if (_clip == 0)
+        {
+            if (_ammoExcess < 15)
             {
-                _shotgunClip += _maxShotgunClip;
-                _shotgunAmmoExcess -= _maxShotgunClip;
-
-                GameManager.Instance.SetClip(3, _shotgunClip);
-            }
-
-            GameManager.Instance.SetExcess(3, _shotgunAmmoExcess);
-
-            if (_equippedGun == _shotgunSprite)
-            {
-                GameManager.Instance.SetCurrentClip(3);
-                GameManager.Instance.SetCurrentExcess(3);
-            }
-
-            if (_shotgunClip < _maxShotgunClip && _shotgunAmmoExcess == _maxShotgunAmmoCarry - _maxShotgunClip)
-            {
-                Sound.Instance.FullAmmo();
+                _clip += _ammoExcess;
+                _ammoExcess -= _ammoExcess;
             }
             else
             {
-                _shotgunAmmoCarry += amount;
-                _shotgunAmmoCarry = Mathf.Min(_shotgunAmmoCarry, _maxShotgunAmmoCarry);
+                _clip += _maxClip;
+                _ammoExcess -= _maxClip;
             }
 
-            GameManager.Instance.SetAmmo(3, _shotgunAmmoCarry);
+            if (gunType == 1)
+            {
+                _pistolClip = _clip;
+            }
+            else if (gunType == 2)
+            {
+                _automaticRifleClip = _clip;
+            }
+            else if (gunType == 3)
+            {
+                _shotgunClip = _clip;
+            }
+
+            GameManager.Instance.SetClip(_gun, _clip);
         }
+
+        if (gunType == 1)
+        {
+            _pistolAmmoExcess = _ammoExcess;
+        }
+        else if (gunType == 2)
+        {
+            _automaticRifleAmmoExcess = _ammoExcess;
+        }
+        else if (gunType == 3)
+        {
+            _shotgunAmmoExcess = _ammoExcess;
+        }
+
+        GameManager.Instance.SetExcess(_gun, _ammoExcess);
+
+        if (_equippedGun == _sprite)
+        {
+            GameManager.Instance.SetCurrentClip(_gun);
+            GameManager.Instance.SetCurrentExcess(_gun);
+        }
+
+        if (_ammoCarry <= _maxAmmoCarry - _clip)
+        {
+            _ammoCarry += amount;
+            _ammoCarry = Mathf.Min(_ammoCarry, _maxAmmoCarry);
+        }
+        else
+        {
+            _ammoCarry += amount;
+            _ammoCarry = Mathf.Min(_ammoCarry, _maxAmmoCarry);
+            Sound.Instance.FullAmmo();
+        }
+
+        if (gunType == 1)
+        {
+            _pistolAmmoCarry = _ammoCarry;
+        }
+        else if (gunType == 2)
+        {
+            _automaticRifleAmmoCarry = _ammoCarry;
+        }
+        else if (gunType == 3)
+        {
+            _shotgunAmmoCarry = _ammoCarry;
+        }
+
+        GameManager.Instance.SetAmmo(_gun, _ammoCarry);
     }
 
     public bool CheckClip(int gunType)
@@ -213,48 +235,56 @@ public class Inventory : Singleton<Inventory>
 
     public void UseAmmo(int gunType, int amount)
     {
+        int _gun = 0;
+        int _clip = 0;
+        int _ammoCarry = 0;
+
         if (gunType == 1)
         {
-            // Reduce Clip
-            _pistolClip -= amount;
-            _pistolClip = Mathf.Max(0, _pistolClip);
-
-            // Reduce Total Ammo Carry
-            _pistolAmmoCarry -= amount;
-            _pistolAmmoCarry = Mathf.Max(0, _pistolAmmoCarry);
-
-            // Establish Clip in UI
-            GameManager.Instance.SetClip(1, _pistolClip);
-            GameManager.Instance.SetCurrentClip(1);
-
-            GameManager.Instance.SetAmmo(1, _pistolAmmoCarry);
+            _gun = 1;
+            _clip = _pistolClip;
+            _ammoCarry = _pistolAmmoCarry;
         }
         else if (gunType == 2)
         {
-            _automaticRifleClip -= amount;
-            _automaticRifleClip = Mathf.Max(0, _automaticRifleClip);
-
-            _automaticRifleAmmoCarry -= amount;
-            _automaticRifleAmmoCarry = Mathf.Max(0, _automaticRifleAmmoCarry);
-
-            GameManager.Instance.SetClip(2, _automaticRifleClip);
-            GameManager.Instance.SetCurrentClip(2);
-
-            GameManager.Instance.SetAmmo(2, _automaticRifleAmmoCarry);
+            _gun = 2;
+            _clip = _automaticRifleClip;
+            _ammoCarry = _automaticRifleAmmoCarry;
         }
         else if (gunType == 3)
         {
-            _shotgunClip -= amount;
-            _shotgunClip = Mathf.Max(0, _shotgunClip);
-
-            _shotgunAmmoCarry -= amount;
-            _shotgunAmmoCarry = Mathf.Max(0, _shotgunAmmoCarry);
-
-            GameManager.Instance.SetClip(3, _shotgunClip);
-            GameManager.Instance.SetCurrentClip(3);
-
-            GameManager.Instance.SetAmmo(3, _shotgunAmmoCarry);
+            _gun = 3;
+            _clip = _shotgunClip;
+            _ammoCarry = _shotgunAmmoCarry;
         }
+
+        _clip -= amount;
+        _clip = Mathf.Max(0, _clip);
+
+        _ammoCarry -= amount;
+        _ammoCarry = Mathf.Max(0, _ammoCarry);
+
+        if (gunType == 1)
+        {
+            _pistolClip = _clip;
+            _pistolAmmoCarry = _ammoCarry;
+        }
+        else if (gunType == 2)
+        {
+            _automaticRifleClip = _clip;
+            _automaticRifleAmmoCarry = _ammoCarry;
+        }
+        else if (gunType == 3)
+        {
+            _shotgunClip = _clip;
+            _shotgunAmmoCarry = _ammoCarry;
+        }
+
+        // Establish Clip in UI
+        GameManager.Instance.SetClip(_gun, _clip);
+        GameManager.Instance.SetCurrentClip(_gun);
+
+        GameManager.Instance.SetAmmo(_gun, _ammoCarry);
     }
 
     public int CheckGun()
@@ -279,162 +309,192 @@ public class Inventory : Singleton<Inventory>
 
     public void AddGun(int gunType)
     {
+        Gun _sprite = _pistolSprite;
+        int _ammoExcess = 0;
+        int _gun = 0;
+
         if (gunType == 1)
         {
-            _equippedGun = _pistolSprite;
-            _secondaryGun = _pistolSprite;
-
-            // Establish Clip and Total Ammo in UI
-            GameManager.Instance.SetCurrentClip(1);
-
-            GameManager.Instance.SetExcess(1, _pistolAmmoExcess);
-            GameManager.Instance.SetCurrentExcess(1);
+            _sprite = _pistolSprite;
+            _ammoExcess = _pistolAmmoExcess;
+            _gun = 1;
         }
         else if (gunType == 2)
         {
-            _equippedGun = _automaticRifleSprite;
-            _primaryGun = _automaticRifleSprite;
-
-            GameManager.Instance.SetCurrentClip(2);
-
-            GameManager.Instance.SetExcess(2, _automaticRifleAmmoExcess);
-            GameManager.Instance.SetCurrentExcess(2);
+            _sprite = _automaticRifleSprite;
+            _ammoExcess = _automaticRifleAmmoExcess;
+            _gun = 2;
         }
         else if (gunType == 3)
         {
-            _equippedGun = _shotgunSprite;
-            _primaryGun = _shotgunSprite;
-
-            GameManager.Instance.SetCurrentClip(3);
-
-            GameManager.Instance.SetExcess(3, _shotgunAmmoExcess);
-            GameManager.Instance.SetCurrentExcess(3);
+            _sprite = _shotgunSprite;
+            _ammoExcess = _shotgunAmmoExcess;
+            _gun = 3;
         }
+
+        _equippedGun = _sprite;
+
+        if (gunType == 1)
+        {
+            _secondaryGun = _sprite;
+        }
+        else if (gunType == 2 || gunType == 3)
+        {
+            _primaryGun = _sprite;
+        }
+
+        GameManager.Instance.SetCurrentClip(_gun);
+
+        GameManager.Instance.SetExcess(_gun, _ammoExcess);
+        GameManager.Instance.SetCurrentExcess(_gun);
 
         UIManager.Instance.ActivateGun(gunType, _pistolSprite, _automaticRifleSprite, _shotgunSprite);
     }
 
+    public void SetReloadTime(int gunType)
+    {
+        if (gunType == 1)
+        {
+            _reloadTime = 2f;
+        }
+        else if (gunType == 2)
+        {
+            _reloadTime = 2.3f;
+        }
+        else if (gunType == 3)
+        {
+            _reloadTime = 2.7f;
+        }
+
+        _currentReloadTime = _reloadTime;
+    }
+
     public void ReloadGun(int gunType)
     {
-        _reloadState = true;
-
-        if (_reloadTime <= 0f)
+        if (_reloadState == false)
         {
+            SetReloadTime(gunType);
+            _reloadState = true;
+        }
+
+        if (_currentReloadTime <= 0f)
+        {
+            int _clip = 0;
+            int _ammoExcess = 0;
+            int _ammoCarry = 0;
+            int _maxClip = 0;
+            int _gun = 0;
+            int _sound = 0;
+
             GameManager.Instance.ReloadingComplete();
 
             if (gunType == 1 && _pistolAmmoCarry > 0)
             {
-                // Reduce Excess
-                if (_pistolAmmoCarry < _maxPistolClip)
-                {
-                    _pistolAmmoExcess -= _pistolAmmoCarry;
-                    _pistolClip += _pistolAmmoCarry;
-                }
-                else
-                {
-                    _pistolAmmoExcess -= _maxPistolClip;
-                    _pistolClip += _maxPistolClip;
-                }
-
-                _pistolAmmoExcess = Mathf.Max(0, _pistolAmmoExcess);
-
-                GameManager.Instance.SetExcess(1, _pistolAmmoExcess);
-                GameManager.Instance.SetCurrentExcess(1);
-
-                GameManager.Instance.SetClip(1, _pistolClip);
-                GameManager.Instance.SetCurrentClip(1);
-
-                Sound.Instance.PlayerGun(2);
+                _clip = _pistolClip;
+                _ammoExcess = _pistolAmmoExcess;
+                _ammoCarry = _pistolAmmoCarry;
+                _maxClip = _maxPistolClip;
+                _gun = 1;
+                _sound = 2;
             }
             else if (gunType == 2 && _automaticRifleAmmoCarry > 0)
             {
-                if (_automaticRifleAmmoCarry < _maxAutomaticRifleClip)
-                {
-                    _automaticRifleAmmoExcess -= _automaticRifleAmmoCarry;
-                    _automaticRifleClip += _automaticRifleAmmoCarry;
-                }
-                else
-                {
-                    _automaticRifleAmmoExcess -= _maxAutomaticRifleClip;
-                    _automaticRifleClip += _maxAutomaticRifleClip;
-                }
-
-                _automaticRifleAmmoExcess = Mathf.Max(0, _automaticRifleAmmoExcess);
-
-                GameManager.Instance.SetExcess(2, _automaticRifleAmmoExcess);
-                GameManager.Instance.SetCurrentExcess(2);
-
-                GameManager.Instance.SetClip(2, _automaticRifleClip);
-                GameManager.Instance.SetCurrentClip(2);
-
-                Sound.Instance.PlayerGun(4);
+                _clip = _automaticRifleClip;
+                _ammoExcess = _automaticRifleAmmoExcess;
+                _ammoCarry = _automaticRifleAmmoCarry;
+                _maxClip = _maxAutomaticRifleClip;
+                _gun = 2;
+                _sound = 4;
             }
             else if (gunType == 3 && _shotgunAmmoCarry > 0)
             {
-                if (_shotgunAmmoCarry < _maxShotgunClip)
-                {
-                    _shotgunAmmoExcess -= _shotgunAmmoCarry;
-                    _shotgunClip += _shotgunAmmoCarry;
-                }
-                else
-                {
-                    _shotgunAmmoExcess -= _maxShotgunClip;
-                    _shotgunClip += _maxShotgunClip;
-                }
-
-                _shotgunAmmoExcess = Mathf.Max(0, _shotgunAmmoExcess);
-
-                GameManager.Instance.SetExcess(3, _shotgunAmmoExcess);
-                GameManager.Instance.SetCurrentExcess(3);
-
-                GameManager.Instance.SetClip(3, _shotgunClip);
-                GameManager.Instance.SetCurrentClip(3);
-
-                Sound.Instance.PlayerGun(6);
+                _clip = _shotgunClip;
+                _ammoExcess = _shotgunAmmoExcess;
+                _ammoCarry = _shotgunAmmoCarry;
+                _maxClip = _maxShotgunClip;
+                _gun = 3;
+                _sound = 6;
             }
 
+            if (_ammoCarry < _maxClip)
+            {
+                _ammoExcess -= _ammoCarry;
+                _clip += _ammoCarry;
+            }
+            else
+            {
+                _ammoExcess -= _maxClip;
+                _clip += _maxClip;
+            }
+
+            if (gunType == 1)
+            {
+                _pistolAmmoExcess = _ammoExcess;
+                _pistolClip = _clip;
+            }
+            else if (gunType == 2)
+            {
+                _automaticRifleAmmoExcess = _ammoExcess;
+                _automaticRifleClip = _clip;
+            }
+            else if (gunType == 3)
+            {
+                _shotgunAmmoExcess = _ammoExcess;
+                _shotgunClip = _clip;
+            }
+
+            _ammoExcess = Mathf.Max(0, _ammoExcess);
+
+            GameManager.Instance.SetExcess(_gun, _ammoExcess);
+            GameManager.Instance.SetCurrentExcess(_gun);
+
+            GameManager.Instance.SetClip(_gun, _clip);
+            GameManager.Instance.SetCurrentClip(_gun);
+
+            Sound.Instance.PlayerGun(_sound);
+
             _reloadState = false;
-            _reloadTime = 3f;
         }
     }
 
     public void SwitchGuns(int arm)
     {
-        if ((arm == 1) && _primaryGun != null && _secondaryGun != null)
+        int _gun = 0;
+        int _sound = 0;
+
+        if (arm == 1)
         {
             _equippedGun = _primaryGun;
 
             if (_equippedGun == _automaticRifleSprite)
             {
-                UIManager.Instance.ActivateGun(2, _pistolSprite, _automaticRifleSprite, _shotgunSprite);
-                GameManager.Instance.SetCurrentClip(2);
-                GameManager.Instance.SetCurrentExcess(2);
-
-                Sound.Instance.PlayerGun(4);
+                _gun = 2;
+                _sound = 4;
             }
             else
             {
-                UIManager.Instance.ActivateGun(3, _pistolSprite, _automaticRifleSprite, _shotgunSprite);
-                GameManager.Instance.SetCurrentClip(3);
-                GameManager.Instance.SetCurrentExcess(3);
-
-                Sound.Instance.PlayerGun(6);
+                _gun = 3;
+                _sound = 6;
             }
         }
-        else if ((arm == 2) && _primaryGun != null && _secondaryGun != null)
+        else if (arm == 2)
         {
             if (_equippedGun == _primaryGun)
             {
                 _equippedGun = _secondaryGun;
 
-                UIManager.Instance.ActivateGun(1, _pistolSprite, _automaticRifleSprite, _shotgunSprite);
-
-                // Establish Clip and Total Ammo in UI
-                GameManager.Instance.SetCurrentClip(1);
-                GameManager.Instance.SetCurrentExcess(1);
-
-                Sound.Instance.PlayerGun(2);
+                _gun = 1;
+                _sound = 2;
             }
+        }
+
+        if (_primaryGun != null && _secondaryGun != null)
+        {
+            UIManager.Instance.ActivateGun(_gun, _pistolSprite, _automaticRifleSprite, _shotgunSprite);
+            GameManager.Instance.SetCurrentClip(_gun);
+            GameManager.Instance.SetCurrentExcess(_gun);
+
+            Sound.Instance.PlayerGun(_sound);
         }
     }
 
