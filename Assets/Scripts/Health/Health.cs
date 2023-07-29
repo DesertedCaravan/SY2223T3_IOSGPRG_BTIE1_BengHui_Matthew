@@ -50,7 +50,7 @@ public class Health : MonoBehaviour
 
         if (_deathState == false)
         {
-            Sound.Instance.DeadEnemy();
+            Sound.Instance.DeadEnemy(this.transform);
 
             _deathState = true;
             enemyUnit.CallDeath();
@@ -66,11 +66,11 @@ public class Health : MonoBehaviour
 
         if (_killCall == 1)
         {
-            Sound.Instance.KillAnnouncer(1);
+            Sound.Instance.KillAnnouncer(this.transform, 1);
         }
         else if (_killCall == 2)
         {
-            Sound.Instance.KillAnnouncer(2);
+            Sound.Instance.KillAnnouncer(this.transform, 2);
         }
     }
 
@@ -93,7 +93,7 @@ public class Health : MonoBehaviour
 
                 if (_currentHealth > 0)
                 {
-                    Sound.Instance.HurtEnemy();
+                    Sound.Instance.HurtEnemy(this.transform);
                 }
             }
             else if (player2 != null)
@@ -103,17 +103,27 @@ public class Health : MonoBehaviour
 
                 if (_currentHealth > 0)
                 {
-                    Sound.Instance.HurtEnemy();
+                    Sound.Instance.HurtEnemy(this.transform);
                 }
             }
 
             if (enemy1 != null || enemy3 != null)
             {
                 TakeDamage(10);
+
+                if (_currentHealth > 0)
+                {
+                    Sound.Instance.HurtEnemy(this.transform);
+                }
             }
             else if (enemy2 != null)
             {
                 TakeDamage(15);
+
+                if (_currentHealth > 0)
+                {
+                    Sound.Instance.HurtEnemy(this.transform);
+                }
             }
 
             if (_currentHealth <= 0 && _announcerState == false)

@@ -39,17 +39,30 @@ public class Bullet : MonoBehaviour
 
         if (barrelSpawner != null)
         {
-            Sound.Instance.BarrelBreak();
+            Sound.Instance.BarrelBreak(this.transform);
             barrelSpawner.TakeDamage();
             Destroy(this.gameObject);
         }
 
-        if (obstacle != null)
+        if (obstacle != null && obstacle.GetObstacleType() == ObstacleType.Wood)
         {
+            Sound.Instance.ObstacleBulletHit(this.transform, 1);
             Destroy(this.gameObject);
         }
-
-        // GameObject e = Instantiate(explosion, this.transform.position, Quaternion.identity);
-        // Destroy(e, 1.5f);
+        else if (obstacle != null && obstacle.GetObstacleType() == ObstacleType.Stone)
+        {
+            Sound.Instance.ObstacleBulletHit(this.transform, 2);
+            Destroy(this.gameObject);
+        }
+        else if (obstacle != null && obstacle.GetObstacleType() == ObstacleType.Metal)
+        {
+            Sound.Instance.ObstacleBulletHit(this.transform, 3);
+            Destroy(this.gameObject);
+        }
+        else if (obstacle != null && obstacle.GetObstacleType() == ObstacleType.Plastic)
+        {
+            Sound.Instance.ObstacleBulletHit(this.transform, 4);
+            Destroy(this.gameObject);
+        }
     }
 }

@@ -24,6 +24,8 @@ public class Inventory : Singleton<Inventory>
     public Gun _automaticRifleSprite;
     public Gun _shotgunSprite;
 
+    public int _currentGun = 0;
+
     [Header("Current Clip")]
     public int _pistolClip = 0;
     public int _automaticRifleClip = 0;
@@ -349,6 +351,7 @@ public class Inventory : Singleton<Inventory>
         GameManager.Instance.SetCurrentExcess(_gun);
 
         UIManager.Instance.ActivateGun(gunType, _pistolSprite, _automaticRifleSprite, _shotgunSprite);
+        UIManager.Instance.ActivateGunSprite(gunType);
     }
 
     public void SetReloadTime(int gunType)
@@ -488,7 +491,7 @@ public class Inventory : Singleton<Inventory>
             }
         }
 
-        if (_primaryGun != null && _secondaryGun != null)
+        if ((_primaryGun != null && _secondaryGun != null) && _currentGun != _gun)
         {
             UIManager.Instance.ActivateGun(_gun, _pistolSprite, _automaticRifleSprite, _shotgunSprite);
             GameManager.Instance.SetCurrentClip(_gun);
@@ -496,6 +499,8 @@ public class Inventory : Singleton<Inventory>
 
             Sound.Instance.PlayerGun(_sound);
         }
+
+        _currentGun = _gun;
     }
 
     public void AddHealthKit()

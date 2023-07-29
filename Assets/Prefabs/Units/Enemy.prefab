@@ -105,6 +105,7 @@ MonoBehaviour:
   _fireOn: 1
   _enemyCount: 0
   _enemyFireOn: 1
+  _enemyReloadOn: 0
 --- !u!82 &2620646058876389907
 AudioSource:
   m_ObjectHideFlags: 0
@@ -434,7 +435,6 @@ MonoBehaviour:
   _name: 
   health: {fileID: 756959253204377057}
   _speed: 0
-  audioSource: {fileID: -6506221051799398357}
   _equippedGun: {fileID: 0}
   _pistolSprite: {fileID: 8656306130841576703}
   _automaticRifleSprite: {fileID: 2790724679720851243}
@@ -451,8 +451,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f535264b3207ce44da657e587f434cc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unit: {fileID: -333567703462414062}
-  target: {fileID: 0}
+  _unit: {fileID: -333567703462414062}
+  _playerTarget: {fileID: 0}
+  _currentTarget: {fileID: 0}
   _deathState: 0
   _aimSwitch: 1
 --- !u!58 &-7405466782699553121
@@ -693,6 +694,7 @@ MonoBehaviour:
   _fireOn: 1
   _enemyCount: 0
   _enemyFireOn: 1
+  _enemyReloadOn: 0
 --- !u!82 &1271645820363407997
 AudioSource:
   m_ObjectHideFlags: 0
@@ -921,6 +923,7 @@ MonoBehaviour:
   _fireOn: 1
   _enemyCount: 0
   _enemyFireOn: 1
+  _enemyReloadOn: 0
   _isHeldDown: 0
 --- !u!82 &8625094083551584833
 AudioSource:

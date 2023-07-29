@@ -46,7 +46,7 @@ public class Shotgun : Gun
     {
         if (_enemyFireOn == true)
         {
-            Sound.Instance.EnemyGun(audioSource, 5);
+            Sound.Instance.EnemyGun(this.transform, 5);
 
             for (int i = 0; i < 8; i++)
             {
@@ -55,13 +55,20 @@ public class Shotgun : Gun
 
             _enemyCount++;
 
-            _enemyFireOn = false;
-            StartCoroutine(CO_EnemyStopFire());
+            if (_enemyCount >= 2)
+            {
+                _enemyReloadOn = true;
+            }
+            else
+            {
+                _enemyFireOn = false;
+                StartCoroutine(CO_EnemyStopFire());
+            }
         }
 
-        if (_enemyFireOn == true && _enemyCount >= 2)
+        if (_enemyReloadOn == true)
         {
-            _enemyFireOn = false;
+            _enemyReloadOn = false;
             StartCoroutine(CO_EnemyReload());
         }
     }
@@ -80,8 +87,10 @@ public class Shotgun : Gun
 
     IEnumerator CO_EnemyReload()
     {
-        Sound.Instance.EnemyGun(audioSource, 6);
+        _enemyFireOn = false;
+        Sound.Instance.EnemyGun(this.transform, 6);
         yield return new WaitForSecondsRealtime(5.4f);
+
         _enemyFireOn = true;
 
         _enemyCount = 0;

@@ -2,16 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ObstacleType
+{
+    Wood,
+    Stone,
+    Metal,
+    Plastic
+}
+
 public class Obstacle : MonoBehaviour
 {
-    public AudioSource audioSource;
+    [SerializeField] public ObstacleType _obstacleType;
 
-    public void Start()
+    public ObstacleType GetObstacleType()
     {
-        audioSource = GetComponent<AudioSource>();
+        return _obstacleType;
     }
 
-    public virtual void OnCollisionEnter2D(Collision2D collision)
+    public void OnCollisionEnter2D(Collision2D collision)
     {
         Bullet bullet = collision.gameObject.GetComponent<Bullet>();
 

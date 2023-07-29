@@ -43,19 +43,27 @@ public class Pistol : Gun
     {
         if (_enemyFireOn == true)
         {
-            Sound.Instance.EnemyGun(audioSource, 1);
+            Sound.Instance.EnemyGun(this.transform, 1);
 
             GameObject b = Instantiate(bullet, turret.transform.position, turret.transform.rotation);
 
             _enemyCount++;
 
-            _enemyFireOn = false;
-            StartCoroutine(CO_EnemyStopFire());
+
+            if (_enemyCount >= 15)
+            {
+                _enemyReloadOn = true;
+            }
+            else
+            {
+                _enemyFireOn = false;
+                StartCoroutine(CO_EnemyStopFire());
+            }
         }
 
-        if (_enemyFireOn == true && _enemyCount >= 15)
+        if (_enemyReloadOn == true)
         {
-            _enemyFireOn = false;
+            _enemyReloadOn = false;
             StartCoroutine(CO_EnemyReload());
         }
     }
@@ -74,8 +82,10 @@ public class Pistol : Gun
 
     IEnumerator CO_EnemyReload()
     {
-        Sound.Instance.EnemyGun(audioSource, 2);
+        _enemyFireOn = false;
+        Sound.Instance.EnemyGun(this.transform, 2);
         yield return new WaitForSecondsRealtime(4.0f);
+
         _enemyFireOn = true;
 
         _enemyCount = 0;

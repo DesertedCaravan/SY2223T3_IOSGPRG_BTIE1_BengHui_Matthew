@@ -3957,7 +3957,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 28e5a05c4fc35354eb4aa31421797d35, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 09a3b85354c9d084594e478d8c0996e0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4685,15 +4685,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 09a3b85354c9d084594e478d8c0996e0, type: 3}
-  m_Color: {r: 1, g: 0.044025064, b: 0.044025064, a: 1}
+  m_Sprite: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1.46, y: 1.46}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &454098509
@@ -5050,6 +5050,11 @@ MonoBehaviour:
   pistolAmmoDisplay: {fileID: 1471409153}
   automaticRifleAmmoDisplay: {fileID: 507441027}
   shotgunAmmoDisplay: {fileID: 1443669742}
+  primaryWeaponDisplay: {fileID: 1963803110}
+  secondaryWeaponDisplay: {fileID: 396116726}
+  pistolSprite: {fileID: 21300000, guid: 28e5a05c4fc35354eb4aa31421797d35, type: 3}
+  automaticRifleSprite: {fileID: 21300000, guid: 3b21e12e2af1c7b439ba385918aec216, type: 3}
+  shotgunSprite: {fileID: 21300000, guid: cd02e0047daa79e4ab2ab0092ed32245, type: 3}
   winStateScreen: {fileID: 1399074582}
   hpSlider: {fileID: 1007605502}
 --- !u!4 &483476243
@@ -5660,7 +5665,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee90f766e6b0db84aa3fec6774c53e0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioSource: {fileID: 0}
 --- !u!4 &506886074 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4020078455601755343, guid: 641ef9ea3f863d4479e501b8131584f1, type: 3}
@@ -5985,6 +5989,7 @@ MonoBehaviour:
   killAnnouncer1: {fileID: 8300000, guid: 9902642c5ae447640b61a590244613b9, type: 3}
   killAnnouncer2: {fileID: 8300000, guid: 1a8d43abe72a07548adb165e42aa7704, type: 3}
   playerDeathAnnouncer: {fileID: 8300000, guid: 305504597dbba294a8660886ecfc9b15, type: 3}
+  playerVictory: {fileID: 8300000, guid: 1df64d55748d03b4aaed5a98383b8583, type: 3}
   barrelBreak: {fileID: 8300000, guid: 98b61d6ca3e9e1e4398bf04152a35c2a, type: 3}
   woodenBulletHit: {fileID: 8300000, guid: 42a36f1faf52e0142936e1e95c6b57c5, type: 3}
   stoneBulletHit: {fileID: 8300000, guid: 308fd1f6cba83fb458f0477f8ab38f38, type: 3}
@@ -6350,15 +6355,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 09a3b85354c9d084594e478d8c0996e0, type: 3}
-  m_Color: {r: 1, g: 0.044025064, b: 0.044025064, a: 1}
+  m_Sprite: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1.46, y: 1.46}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &552213972
@@ -8931,14 +8936,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 0}
-      propertyPath: m_Volume
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: hurtPlayer
-      value: 
-      objectReference: {fileID: 8300000, guid: e3606e0d7aa95044696198c24b1a008a, type: 3}
     - target: {fileID: 8081434849121114825, guid: fe442cc07ce14774090ed7e9d5022038, type: 3}
       propertyPath: m_Name
       value: Player
@@ -13768,15 +13765,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 09a3b85354c9d084594e478d8c0996e0, type: 3}
-  m_Color: {r: 1, g: 0.044025064, b: 0.044025064, a: 1}
+  m_Sprite: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1.46, y: 1.46}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &1266803244
@@ -17579,7 +17576,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee90f766e6b0db84aa3fec6774c53e0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioSource: {fileID: 0}
 --- !u!1001 &1656442817
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19085,7 +19081,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee90f766e6b0db84aa3fec6774c53e0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioSource: {fileID: 0}
 --- !u!1001 &1754532954
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19670,7 +19665,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1818284034}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -70, y: 27.5, z: 0}
+  m_LocalPosition: {x: -60, y: 27.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -19718,15 +19713,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 09a3b85354c9d084594e478d8c0996e0, type: 3}
-  m_Color: {r: 1, g: 0.044025064, b: 0.044025064, a: 1}
+  m_Sprite: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 1.46, y: 1.46}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &1818284037
@@ -21080,7 +21075,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3b21e12e2af1c7b439ba385918aec216, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 09a3b85354c9d084594e478d8c0996e0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -22145,7 +22140,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee90f766e6b0db84aa3fec6774c53e0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioSource: {fileID: 0}
 --- !u!4 &2043509807 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4061073287342598772, guid: 2c0b1c66077c8e44382800e786a1a535, type: 3}

@@ -25,6 +25,13 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private TextMeshProUGUI automaticRifleAmmoDisplay;
     [SerializeField] private TextMeshProUGUI shotgunAmmoDisplay;
 
+    [SerializeField] private GameObject primaryWeaponDisplay;
+    [SerializeField] private GameObject secondaryWeaponDisplay;
+
+    [SerializeField] private Sprite pistolSprite;
+    [SerializeField] private Sprite automaticRifleSprite;
+    [SerializeField] private Sprite shotgunSprite;
+
     [SerializeField] private TextMeshProUGUI winStateScreen;
 
     [SerializeField] private Slider hpSlider;
@@ -140,6 +147,25 @@ public class UIManager : Singleton<UIManager>
             pistol.gameObject.SetActive(false);
             automaticRifle.gameObject.SetActive(false);
             shotgun.gameObject.SetActive(true);
+        }
+    }
+
+    public void ActivateGunSprite(int mode)
+    {
+        Image primaryImage = primaryWeaponDisplay.gameObject.GetComponent<Image>();
+        Image secondaryImage = secondaryWeaponDisplay.gameObject.GetComponent<Image>();
+
+        if (mode == 1)
+        {
+            secondaryImage.sprite = pistolSprite;
+        }
+        else if (mode == 2)
+        {
+            primaryImage.sprite = automaticRifleSprite;
+        }
+        else if (mode == 3)
+        {
+            primaryImage.sprite = shotgunSprite;
         }
     }
 }

@@ -28,6 +28,7 @@ public class Gun : MonoBehaviour
     [Header("Enemy Variables")]
     public int _enemyCount = 0;
     public bool _enemyFireOn = true;
+    public bool _enemyReloadOn = false;
 
     public void Start()
     {
@@ -36,15 +37,7 @@ public class Gun : MonoBehaviour
 
     public virtual void Shoot()
     {
-        // _gunType == GunType.Pistol
-
         Debug.Log("Base gun shooting");
-
-        // b.GetComponent<Bullet>().Initialize(_fireSpeed, _fireRate);
-
-        // b.GetComponent<Rigidbody2D>().AddForce(Mathf.Atan2(turret.transform.position.y, turret.transform.position.x) * _fireSpeed);
-        // b.GetComponent<Rigidbody2D>().AddForce(new Vector2(turret.transform.position.x * _fireSpeed, turret.transform.position.y * _fireSpeed));
-        // b.GetComponent<Rigidbody2D>().AddForce(turret.transform.forward * _fireSpeed);
     }
 
     public virtual void Reload()

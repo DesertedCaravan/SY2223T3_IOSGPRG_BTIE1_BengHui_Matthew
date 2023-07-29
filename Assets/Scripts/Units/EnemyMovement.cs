@@ -7,10 +7,12 @@ public class EnemyMovement : MonoBehaviour
     // Reference: https://discussions.unity.com/t/make-sprite-look-at-vector2-in-unity-2d/97929
 
     // Get Enemy unit._speed
-    [SerializeField] private Unit unit;
+    [SerializeField] private Unit _unit;
 
     [SerializeField] public GameObject _playerTarget;
-    [SerializeField] public GameObject _enemyTarget;
+    [SerializeField] public EnemyMovement _currentTarget;
+
+    Vector3 _defaultAim;
 
     public bool _deathState = false;
     public bool _aimSwitch = true;
@@ -18,14 +20,24 @@ public class EnemyMovement : MonoBehaviour
     private float _xRotation;
     private float _rotationChangeElapse;
 
-    private bool _spotted = false;
-    private float _trackingSpeed = 2.0f;
+    private bool _spottedPlayer = false;
+    private bool _spottedEnemy = false;
+    private float _trackingSpeed = 3.0f;
+
+    private void Start()
+    {
+        _defaultAim = _playerTarget.transform.position;
+
+        _trackingSpeed = Random.Range(2.5f, 3.5f);
+
+        StartCoroutine(CO_ChangeDefaultAim());
+    }
 
     private void LateUpdate()
     {
         if (_deathState == false)
         {
-            if (_spotted == false && _aimSwitch == true)
+            if ((_spottedPlayer == false && _spottedEnemy == false) && _aimSwitch == true)
             {
                 _xRotation = Random.Range(0, 361);
 
@@ -35,19 +47,43 @@ public class EnemyMovement : MonoBehaviour
                 StartCoroutine(CO_ChangeAim());
             }
 
-            if (_spotted == true)
+            if (_spottedPlayer == true)
             {
-                Vector3 v_diff = (_playerTarget.transform.position - transform.position);
-                float atan2 = Mathf.Atan2(v_diff.y, v_diff.x);
+                Vector3 _diff = (_playerTarget.transform.position - transform.position);
+                float atan2 = Mathf.Atan2(_diff.y, _diff.x);
                 transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg - 90f), _trackingSpeed * Time.deltaTime);
 
-                if (InRange())
+                if (InRange(1, 7.5f) == true)
                 {
-                    unit.Fire();
+                    _unit.Fire();
+                }
+            }
+            else if (_spottedEnemy == true)
+            {
+                Vector3 _diff;
+
+                if (_currentTarget != null)
+                {
+                    _diff = (_currentTarget.transform.position - transform.position);
+                }
+                else
+                {
+                    _diff = (_defaultAim - this.transform.position);
+                }
+
+                float atan2 = Mathf.Atan2(_diff.y, _diff.x);
+                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg - 90f), _trackingSpeed * Time.deltaTime);
+
+                if (_currentTarget != null && InRange(2, 7.5f) == true)
+                {
+                    _unit.Fire();
                 }
             }
 
-            transform.position += transform.up * unit._speed * Time.deltaTime; 
+            if (InRange(1, 10f) == true || InRange(2, 7.5f) == false)
+            {
+                transform.position += transform.up * _unit._speed * Time.deltaTime;
+            }
         }
     }
 
@@ -58,7 +94,13 @@ public class EnemyMovement : MonoBehaviour
 
         if (player != null)
         {
-            _spotted = true;
+            _spottedPlayer = true;
+        }
+        
+        if (enemy != null)
+        {
+            _spottedEnemy = true;
+            _currentTarget = enemy;
         }
     }
 
@@ -69,15 +111,35 @@ public class EnemyMovement : MonoBehaviour
 
         if (player != null)
         {
-            _spotted = false;
+            _spottedPlayer = false;
+        }
+
+        if (enemy != null)
+        {
+            _spottedEnemy = false;
+            _currentTarget = null;
         }
     }
 
-    public bool InRange()
+    public bool InRange(int unit, float range)
     {
-        Vector3 distance = _playerTarget.transform.position - this.transform.position;
+        Vector3 _playerDistance = _playerTarget.transform.position - this.transform.position;
+        Vector3 _enemyDistance;
 
-        if (distance.magnitude < 7.5f) // ensures that the object stops moving up until a certain point.
+        if (_currentTarget != null)
+        {
+            _enemyDistance = _currentTarget.transform.position - this.transform.position;
+        }
+        else
+        {
+            _enemyDistance = _defaultAim - this.transform.position;
+        }
+
+        if (_playerDistance.magnitude < range && unit == 1)
+        {
+            return true;
+        }
+        else if (_enemyDistance.magnitude < range && unit == 2)
         {
             return true;
         }
@@ -98,5 +160,18 @@ public class EnemyMovement : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(_rotationChangeElapse);
         _aimSwitch = true;
+    }
+
+    IEnumerator CO_ChangeDefaultAim()
+    {
+        while (true)
+        {
+            yield return new WaitForSecondsRealtime(10f);
+
+            float xPos = Random.Range(-100f, 100f);
+            float yPos = Random.Range(-50, 50);
+
+            _defaultAim = new Vector3(xPos, yPos, 0f);
+        }
     }
 }

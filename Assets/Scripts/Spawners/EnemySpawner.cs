@@ -24,8 +24,8 @@ public class EnemySpawner : MonoBehaviour
 
         for (int i = 0; i < count; i++)
         {
-            randomX = Random.Range(-10, 10);
-            randomY = Random.Range(-10, 10);
+            randomX = Random.Range(-30, 30);
+            randomY = Random.Range(-20, 20);
             position.x = gameObject.transform.position.x + randomX;
             position.y = gameObject.transform.position.y + randomY;
 
@@ -39,7 +39,6 @@ public class EnemySpawner : MonoBehaviour
 
             EnemyMovement unitMove = unitGO.GetComponent<EnemyMovement>();
             unitMove._playerTarget = _playerPrefab;
-            unitMove._enemyTarget = _enemyPrefab;
         }
     }
 }

@@ -172,6 +172,8 @@ public class GameManager : Singleton<GameManager>
 
     public void Winner()
     {
+        Sound.Instance.PlayerVictory();
+
         _winState = "YOU WIN";
         OnWinStateChange?.Invoke();
     }

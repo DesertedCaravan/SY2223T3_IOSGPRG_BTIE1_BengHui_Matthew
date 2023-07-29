@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Enemy : Unit
 {
-    public AudioSource audioSource;
-
     [SerializeField] private Gun _equippedGun;
 
     public Gun _pistolSprite;
@@ -16,8 +14,6 @@ public class Enemy : Unit
 
     public void Start()
     {
-        audioSource = GetComponent<AudioSource>();
-
         _mode = Random.Range(1, 4);
 
         if (_mode == 1)

@@ -65,19 +65,26 @@ public class AutomaticRifle : Gun
     {
         if (_enemyFireOn == true)
         {
-            Sound.Instance.EnemyGun(audioSource, 3);
+            Sound.Instance.EnemyGun(this.transform, 3);
 
             GameObject b = Instantiate(bullet, turret.transform.position, turret.transform.rotation);
 
             _enemyCount++;
 
-            _enemyFireOn = false;
-            StartCoroutine(CO_EnemyStopFire());
+            if (_enemyCount >= 30)
+            {
+                _enemyReloadOn = true;
+            }
+            else
+            {
+                _enemyFireOn = false;
+                StartCoroutine(CO_EnemyStopFire());
+            }
         }
 
-        if (_enemyFireOn == true && _enemyCount >= 30)
+        if (_enemyReloadOn == true)
         {
-            _enemyFireOn = false;
+            _enemyReloadOn = false;
             StartCoroutine(CO_EnemyReload());
         }
     }
@@ -97,7 +104,9 @@ public class AutomaticRifle : Gun
 
     IEnumerator CO_EnemyReload()
     {
-        Sound.Instance.EnemyGun(audioSource, 4);
+        _enemyFireOn = false;
+
+        Sound.Instance.EnemyGun(this.transform, 4);
         yield return new WaitForSecondsRealtime(4.6f);
         _enemyFireOn = true;
 

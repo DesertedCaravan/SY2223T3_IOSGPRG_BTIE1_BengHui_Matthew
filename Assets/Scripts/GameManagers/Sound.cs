@@ -32,6 +32,8 @@ public class Sound : Singleton<Sound>
     public AudioClip killAnnouncer2;
     public AudioClip playerDeathAnnouncer;
 
+    public AudioClip playerVictory;
+
     [Header("Obstacle Sounds")]
     public AudioClip barrelBreak;
 
@@ -83,31 +85,31 @@ public class Sound : Singleton<Sound>
         playerSource.PlayOneShot(fullAmmo);
     }
 
-    public void EnemyGun(AudioSource enemySource, int type)
+    public void EnemyGun(Transform enemyPosition, int type)
     {
         if (type == 1)
         {
-            enemySource.PlayOneShot(pistolShoot);
+            AudioSource.PlayClipAtPoint(pistolShoot, enemyPosition.position, 30f);
         }
         else if (type == 2)
         {
-            enemySource.PlayOneShot(pistolReload);
+            AudioSource.PlayClipAtPoint(pistolReload, enemyPosition.position, 30f);
         }
         else if (type == 3)
         {
-            enemySource.PlayOneShot(automaticRifleShoot);
+            AudioSource.PlayClipAtPoint(automaticRifleShoot, enemyPosition.position, 30f);
         }
         else if (type == 4)
         {
-            enemySource.PlayOneShot(automaticRifleReload);
+            AudioSource.PlayClipAtPoint(automaticRifleReload, enemyPosition.position, 30f);
         }
         else if (type == 5)
         {
-            enemySource.PlayOneShot(shotgunShoot);
+            AudioSource.PlayClipAtPoint(shotgunShoot, enemyPosition.position, 30f);
         }
         else if (type == 6)
         {
-            enemySource.PlayOneShot(shotgunReload);
+            AudioSource.PlayClipAtPoint(shotgunReload, enemyPosition.position, 30f);
         }
     }
 
@@ -116,9 +118,9 @@ public class Sound : Singleton<Sound>
         playerSource.PlayOneShot(hurtPlayer);
     }
 
-    public void HurtEnemy()
+    public void HurtEnemy(Transform enemyPosition)
     {
-        playerSource.PlayOneShot(hurtEnemy);
+        AudioSource.PlayClipAtPoint(hurtEnemy, enemyPosition.position, 30f);
     }
 
     public void DeadPlayer()
@@ -126,9 +128,9 @@ public class Sound : Singleton<Sound>
         playerSource.PlayOneShot(deadPlayer);
     }
 
-    public void DeadEnemy()
+    public void DeadEnemy(Transform enemyPosition)
     {
-        playerSource.PlayOneShot(deadEnemy);
+        AudioSource.PlayClipAtPoint(deadEnemy, enemyPosition.position, 30f);
     }
 
     public void Heal()
@@ -141,45 +143,50 @@ public class Sound : Singleton<Sound>
         playerSource.PlayOneShot(denyHeal);
     }
 
-    public void BarrelBreak()
+    public void BarrelBreak(Transform barrelPosition)
     {
-        playerSource.PlayOneShot(barrelBreak);
+        AudioSource.PlayClipAtPoint(barrelBreak, barrelPosition.position, 15f);
     }
 
-    public void ObstacleBulletHit(AudioSource environmentSource, int type)
+    public void ObstacleBulletHit(Transform environmentPosition, int type)
     {
         if (type == 1)
         {
-            environmentSource.PlayOneShot(woodenBulletHit);
+            AudioSource.PlayClipAtPoint(woodenBulletHit, environmentPosition.position, 15f);
         }
         else if (type == 2)
         {
-            environmentSource.PlayOneShot(stoneBulletHit);
+            AudioSource.PlayClipAtPoint(stoneBulletHit, environmentPosition.position, 15f);
         }
         else if (type == 3)
         {
-            environmentSource.PlayOneShot(metalBulletHit);
+            AudioSource.PlayClipAtPoint(metalBulletHit, environmentPosition.position, 15f);
         }
         else if (type == 4)
         {
-            environmentSource.PlayOneShot(plasticBulletHit);
+            AudioSource.PlayClipAtPoint(plasticBulletHit, environmentPosition.position, 15f);
         }
     }
 
-    public void KillAnnouncer(int type)
+    public void KillAnnouncer(Transform killPosition, int type)
     {
         if (type == 1)
         {
-            playerSource.PlayOneShot(killAnnouncer1);
+            AudioSource.PlayClipAtPoint(killAnnouncer1, killPosition.position, 60f);
         }
         else if (type == 2)
         {
-            playerSource.PlayOneShot(killAnnouncer2);
+            AudioSource.PlayClipAtPoint(killAnnouncer2, killPosition.position, 60f);
         }
     }
 
     public void PlayerDeathAnnouncer()
     {
         playerSource.PlayOneShot(playerDeathAnnouncer);
+    }
+
+    public void PlayerVictory()
+    {
+        playerSource.PlayOneShot(playerVictory);
     }
 }

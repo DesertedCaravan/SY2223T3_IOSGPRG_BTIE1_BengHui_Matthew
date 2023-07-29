@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8420880785298995748}
   - component: {fileID: 881345308063402605}
   - component: {fileID: 5461228908792994091}
+  - component: {fileID: 2724050113861919082}
   m_Layer: 0
   m_Name: BossEnemy
   m_TagString: Untagged
@@ -101,6 +102,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _currentHealth: 0
   _maxHealth: 0
+  _killCall: 1
+  _announcerState: 0
+  _deathState: 0
 --- !u!114 &881345308063402605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -116,7 +120,6 @@ MonoBehaviour:
   _name: 
   health: {fileID: 8420880785298995748}
   _speed: 0
-  gun: {fileID: 0}
 --- !u!58 &5461228908792994091
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -133,3 +136,20 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &2724050113861919082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7252902298326324545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f535264b3207ce44da657e587f434cc7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unit: {fileID: 881345308063402605}
+  _playerTarget: {fileID: 0}
+  _currentTarget: {fileID: 0}
+  _deathState: 0
+  _aimSwitch: 1
