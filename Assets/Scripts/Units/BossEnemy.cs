@@ -4,13 +4,21 @@ using UnityEngine;
 
 public class BossEnemy : Unit
 {
-    public override void Initialize(string name, int maxHealth, float speed)
+    [SerializeField] private Gun _equippedGun;
+
+    public Gun _grenadeLauncherSprite;
+
+    int _mode = 4;
+
+    public void Start()
     {
-        Debug.Log("WARNING BOSS IS SPAWNING");
+        _equippedGun = _grenadeLauncherSprite;
 
-        // base refers to the base class, which carries over to this class
-        base.Initialize(name, maxHealth, speed);
+        UIManager.Instance.ActivateGun(_mode, _grenadeLauncherSprite);
+    }
 
-        Debug.Log("BOSS ENEMY SPAWNED");
+    public override void Fire()
+    {
+        _equippedGun.EnemyShoot();
     }
 }

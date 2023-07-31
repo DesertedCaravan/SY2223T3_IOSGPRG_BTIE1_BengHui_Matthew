@@ -7,7 +7,8 @@ public enum ObstacleType
     Wood,
     Stone,
     Metal,
-    Plastic
+    Plastic,
+    Null
 }
 
 public class Obstacle : MonoBehaviour

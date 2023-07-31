@@ -8,7 +8,7 @@ public class BarrelSpawner : PickupSpawner
 
     private Vector3 scaleChange;
 
-    public int _health = 40;
+    public int _health = 100;
     public bool _destroyed = false;
 
     public override void Start()
@@ -16,9 +16,10 @@ public class BarrelSpawner : PickupSpawner
         scaleChange = new Vector3(0.25f, 0.25f, 0.25f);
     }
 
-    public void TakeDamage()
+    public void TakeDamage(int damage)
     {
-        _health -= 10;
+        _health -= damage;
+        Debug.Log(_health);
         this.transform.localScale -= scaleChange;
 
         if (_health <= 0 && _destroyed == false)

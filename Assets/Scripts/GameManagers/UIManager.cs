@@ -24,6 +24,7 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private TextMeshProUGUI pistolAmmoDisplay;
     [SerializeField] private TextMeshProUGUI automaticRifleAmmoDisplay;
     [SerializeField] private TextMeshProUGUI shotgunAmmoDisplay;
+    [SerializeField] private TextMeshProUGUI grenadeLauncherAmmoDisplay;
 
     [SerializeField] private GameObject primaryWeaponDisplay;
     [SerializeField] private GameObject secondaryWeaponDisplay;
@@ -31,7 +32,9 @@ public class UIManager : Singleton<UIManager>
     [SerializeField] private Sprite pistolSprite;
     [SerializeField] private Sprite automaticRifleSprite;
     [SerializeField] private Sprite shotgunSprite;
+    [SerializeField] private Sprite grenadeLauncherSprite;
 
+    [SerializeField] private TextMeshProUGUI reloadStateScreen;
     [SerializeField] private TextMeshProUGUI winStateScreen;
 
     [SerializeField] private Slider hpSlider;
@@ -62,7 +65,10 @@ public class UIManager : Singleton<UIManager>
 
         GameManager.Instance.OnAmmoChange.AddListener(UpdateAmmoDisplay);
         UpdateAmmoDisplay();
-        
+
+        GameManager.Instance.OnReloadStateChange.AddListener(ReloadDisplay);
+        ReloadDisplay();
+
         GameManager.Instance.OnWinStateChange.AddListener(WinStateDisplay);
         WinStateDisplay();
     }
@@ -97,6 +103,12 @@ public class UIManager : Singleton<UIManager>
         pistolAmmoDisplay.SetText(string.Format("{0}", Inventory.Instance._pistolAmmoCarry));
         automaticRifleAmmoDisplay.SetText(string.Format("{0}", Inventory.Instance._automaticRifleAmmoCarry));
         shotgunAmmoDisplay.SetText(string.Format("{0}", Inventory.Instance._shotgunAmmoCarry));
+        grenadeLauncherAmmoDisplay.SetText(string.Format("{0}", Inventory.Instance._grenadeLauncherAmmoCarry));
+    }
+
+    public void ReloadDisplay()
+    {
+        reloadStateScreen.SetText(string.Format("{0}", GameManager.Instance._reloadState));
     }
 
     public void WinStateDisplay()
@@ -128,25 +140,43 @@ public class UIManager : Singleton<UIManager>
         quitButton.gameObject.SetActive(true);
     }
 
-    public void ActivateGun(int mode, Gun pistol, Gun automaticRifle, Gun shotgun)
+    public void ActivateGun(int mode, Gun pistol, Gun automaticRifle, Gun shotgun, Gun grenadeLauncher)
     {
         if (mode == 1)
         {
             pistol.gameObject.SetActive(true);
             automaticRifle.gameObject.SetActive(false);
             shotgun.gameObject.SetActive(false);
+            grenadeLauncher.gameObject.SetActive(false);
         }
         else if (mode == 2)
         {
             pistol.gameObject.SetActive(false);
             automaticRifle.gameObject.SetActive(true);
             shotgun.gameObject.SetActive(false);
+            grenadeLauncher.gameObject.SetActive(false);
         }
         else if (mode == 3)
         {
             pistol.gameObject.SetActive(false);
             automaticRifle.gameObject.SetActive(false);
             shotgun.gameObject.SetActive(true);
+            grenadeLauncher.gameObject.SetActive(false);
+        }
+        else if (mode == 4)
+        {
+            pistol.gameObject.SetActive(false);
+            automaticRifle.gameObject.SetActive(false);
+            shotgun.gameObject.SetActive(false);
+            grenadeLauncher.gameObject.SetActive(true);
+        }
+    }
+
+    public void ActivateGun(int mode, Gun grenadeLauncher)
+    {
+        if (mode == 4)
+        {
+            grenadeLauncher.gameObject.SetActive(true);
         }
     }
 
@@ -166,6 +196,10 @@ public class UIManager : Singleton<UIManager>
         else if (mode == 3)
         {
             primaryImage.sprite = shotgunSprite;
+        }
+        else if (mode == 4)
+        {
+            primaryImage.sprite = grenadeLauncherSprite;
         }
     }
 }

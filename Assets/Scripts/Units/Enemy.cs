@@ -9,6 +9,7 @@ public class Enemy : Unit
     public Gun _pistolSprite;
     public Gun _automaticRifleSprite;
     public Gun _shotgunSprite;
+    public Gun _grenadeLauncherSprite;
 
     int _mode = 0;
 
@@ -28,8 +29,12 @@ public class Enemy : Unit
         {
             _equippedGun = _shotgunSprite;
         }
+        else if (_mode == 4)
+        {
+            _equippedGun = _grenadeLauncherSprite;
+        }
 
-        UIManager.Instance.ActivateGun(_mode, _pistolSprite, _automaticRifleSprite, _shotgunSprite);
+        UIManager.Instance.ActivateGun(_mode, _pistolSprite, _automaticRifleSprite, _shotgunSprite, _grenadeLauncherSprite);
     }
 
     public override void Fire()

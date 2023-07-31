@@ -47,6 +47,7 @@ public class Health : MonoBehaviour
     public void Death()
     {
         EnemyMovement enemyUnit = this.gameObject.GetComponent<EnemyMovement>();
+        BossPickupSpawner bossPickupSpawner = this.gameObject.GetComponent<BossPickupSpawner>();
 
         if (_deathState == false)
         {
@@ -56,6 +57,12 @@ public class Health : MonoBehaviour
             enemyUnit.CallDeath();
 
             GameManager.Instance.DecreaseSurvivors();
+
+            if (bossPickupSpawner != null)
+            {
+                bossPickupSpawner.SpawnBossDrops();
+            }
+
             Destroy(this.gameObject, 2.0f);
         }
     }
@@ -76,17 +83,12 @@ public class Health : MonoBehaviour
 
     public virtual void OnCollisionEnter2D(Collision2D collision)
     {
-        PlayerPistolBullet player1 = collision.gameObject.GetComponent<PlayerPistolBullet>();
-        PlayerRapidFire player2 = collision.gameObject.GetComponent<PlayerRapidFire>();
-        PlayerShotgunSpread player3 = collision.gameObject.GetComponent<PlayerShotgunSpread>();
+        Bullet bullet = collision.gameObject.GetComponent<Bullet>();
+        GrenadeExplosion grenadeExplosion = collision.gameObject.GetComponent<GrenadeExplosion>();
 
-        EnemyPistolBullet enemy1 = collision.gameObject.GetComponent<EnemyPistolBullet>();
-        EnemyRapidFire enemy2 = collision.gameObject.GetComponent<EnemyRapidFire>();
-        EnemyShotgunSpread enemy3 = collision.gameObject.GetComponent<EnemyShotgunSpread>();
-
-        if (player1 != null || player2 != null || player3 != null || enemy1 != null || enemy2 != null || enemy3 != null)
+        if (bullet != null)
         {
-            if (player1 != null || player3 != null)
+            if (bullet.GetBulletType() == BulletType.PlayerPistolBullet || bullet.GetBulletType() == BulletType.PlayerShotgunSpread)
             {
                 GameManager.Instance.IncreaseHighScore();
                 TakeDamage(10);
@@ -96,7 +98,7 @@ public class Health : MonoBehaviour
                     Sound.Instance.HurtEnemy(this.transform);
                 }
             }
-            else if (player2 != null)
+            else if (bullet.GetBulletType() == BulletType.PlayerRapidFire)
             {
                 GameManager.Instance.IncreaseHighScore();
                 TakeDamage(15);
@@ -107,7 +109,7 @@ public class Health : MonoBehaviour
                 }
             }
 
-            if (enemy1 != null || enemy3 != null)
+            if (bullet.GetBulletType() == BulletType.EnemyPistolBullet || bullet.GetBulletType() == BulletType.EnemyShotgunSpread)
             {
                 TakeDamage(10);
 
@@ -116,9 +118,41 @@ public class Health : MonoBehaviour
                     Sound.Instance.HurtEnemy(this.transform);
                 }
             }
-            else if (enemy2 != null)
+            else if (bullet.GetBulletType() == BulletType.EnemyRapidFire)
             {
                 TakeDamage(15);
+
+                if (_currentHealth > 0)
+                {
+                    Sound.Instance.HurtEnemy(this.transform);
+                }
+            }
+
+            if (_currentHealth <= 0 && _announcerState == false)
+            {
+                KillAnnouncer();
+                _announcerState = true;
+
+                Death();
+            }
+        }
+
+        if (grenadeExplosion != null)
+        {
+            if (grenadeExplosion.GetExplosionType() == ExplosionType.PlayerExplosion)
+            {
+                GameManager.Instance.IncreaseHighScore();
+                TakeDamage(100);
+
+                if (_currentHealth > 0)
+                {
+                    Sound.Instance.HurtEnemy(this.transform);
+                }
+            }
+
+            if (grenadeExplosion.GetExplosionType() == ExplosionType.EnemyExplosion)
+            {
+                TakeDamage(100);
 
                 if (_currentHealth > 0)
                 {

@@ -27,20 +27,37 @@ public class PlayerHealth : Health
 
     public override void OnCollisionEnter2D(Collision2D collision)
     {
-        EnemyPistolBullet enemy1 = collision.gameObject.GetComponent<EnemyPistolBullet>();
-        EnemyRapidFire enemy2 = collision.gameObject.GetComponent<EnemyRapidFire>();
-        EnemyShotgunSpread enemy3 = collision.gameObject.GetComponent<EnemyShotgunSpread>();
+        Bullet bullet = collision.gameObject.GetComponent<Bullet>();
+        GrenadeExplosion grenadeExplosion = collision.gameObject.GetComponent<GrenadeExplosion>();
 
-        if (enemy1 != null || enemy2 != null || enemy3 != null)
+        if (bullet != null)
         {
-            if (enemy1 != null || enemy3 != null)
+            if (bullet.GetBulletType() == BulletType.EnemyPistolBullet || bullet.GetBulletType() == BulletType.EnemyShotgunSpread)
             {
                 TakeDamage(10);
             }
-            else if (enemy2 != null)
+            else if (bullet.GetBulletType() == BulletType.EnemyRapidFire)
             {
                 TakeDamage(15);
             }
+
+            if (_currentHealth > 0)
+            {
+                Sound.Instance.HurtPlayer();
+            }
+
+            if (_currentHealth <= 0 && _announcerState == false)
+            {
+                Sound.Instance.PlayerDeathAnnouncer();
+                _announcerState = true;
+
+                PlayerDeath();
+            }
+        }
+
+        if (grenadeExplosion != null)
+        {
+            TakeDamage(100);
 
             if (_currentHealth > 0)
             {

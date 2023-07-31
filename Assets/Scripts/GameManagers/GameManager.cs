@@ -15,12 +15,11 @@ public class GameManager : Singleton<GameManager>
     public UnityEvent OnAmmoChange;
     public UnityEvent OnClipChange;
     public UnityEvent OnExcessChange;
+    public UnityEvent OnReloadStateChange;
     public UnityEvent OnWinStateChange;
 
-    // [SerializeField] public Slider lifeSlider;
-
     public int _highScore = 0;
-    public int _survivors = 20;
+    public int _survivors = 21;
 
     public int _life = 0;
     public int _medKit = 0;
@@ -31,16 +30,20 @@ public class GameManager : Singleton<GameManager>
     public int _pistolAmmo = 0;
     public int _automaticRifleAmmo = 0;
     public int _shotgunAmmo = 0;
+    public int _grenadeLauncherAmmo = 0;
 
     public int _pistolExcess = 0;
     public int _automaticRifleExcess = 0;
     public int _shotgunExcess = 0;
+    public int _grenadeLauncherExcess = 0;
 
     public int _pistolClip = 0;
     public int _automaticRifleClip = 0;
     public int _shotgunClip = 0;
+    public int _grenadeLauncherClip = 0;
 
     public int _enemyTally = 0;
+    public string _reloadState;
     public string _winState;
 
     public void IncreaseHighScore()
@@ -86,6 +89,10 @@ public class GameManager : Singleton<GameManager>
         {
             _currentClip = _shotgunClip;
         }
+        else if (gunType == 4)
+        {
+            _currentClip = _grenadeLauncherClip;
+        }
 
         OnClipChange?.Invoke();
     }
@@ -103,6 +110,10 @@ public class GameManager : Singleton<GameManager>
         else if (gunType == 3)
         {
             _currentExcess = _shotgunExcess;
+        }
+        else if (gunType == 4)
+        {
+            _currentExcess = _grenadeLauncherExcess;
         }
 
         OnExcessChange?.Invoke();
@@ -122,7 +133,11 @@ public class GameManager : Singleton<GameManager>
         {
             _shotgunAmmo = amount;
         }
-        
+        else if (gunType == 4)
+        {
+            _grenadeLauncherAmmo = amount;
+        }
+
         OnAmmoChange?.Invoke();
     }
 
@@ -140,6 +155,10 @@ public class GameManager : Singleton<GameManager>
         {
             _shotgunClip = amount;
         }
+        else if (gunType == 4)
+        {
+            _grenadeLauncherClip = amount;
+        }
     }
 
     public void SetExcess(int gunType, int amount)
@@ -156,18 +175,22 @@ public class GameManager : Singleton<GameManager>
         {
             _shotgunExcess = amount;
         }
+        else if (gunType == 4)
+        {
+            _grenadeLauncherExcess = amount;
+        }
     }
 
     public void Reloading()
     {
-        _winState = "Reloading...";
-        OnWinStateChange?.Invoke();
+        _reloadState = "Reloading...";
+        OnReloadStateChange?.Invoke();
     }
 
     public void ReloadingComplete()
     {
-        _winState = " ";
-        OnWinStateChange?.Invoke();
+        _reloadState = " ";
+        OnReloadStateChange?.Invoke();
     }
 
     public void Winner()

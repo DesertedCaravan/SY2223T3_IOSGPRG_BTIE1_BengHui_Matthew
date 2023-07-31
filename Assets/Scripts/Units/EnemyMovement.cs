@@ -28,8 +28,6 @@ public class EnemyMovement : MonoBehaviour
     {
         _defaultAim = _playerTarget.transform.position;
 
-        _trackingSpeed = Random.Range(2.5f, 3.5f);
-
         StartCoroutine(CO_ChangeDefaultAim());
     }
 
@@ -74,13 +72,13 @@ public class EnemyMovement : MonoBehaviour
                 float atan2 = Mathf.Atan2(_diff.y, _diff.x);
                 transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0f, 0f, atan2 * Mathf.Rad2Deg - 90f), _trackingSpeed * Time.deltaTime);
 
-                if (_currentTarget != null && InRange(2, 7.5f) == true)
+                if (_currentTarget != null && InRange(2, 10f) == true)
                 {
                     _unit.Fire();
                 }
             }
 
-            if (InRange(1, 10f) == true || InRange(2, 7.5f) == false)
+            if (InRange(1, 10f) == true || InRange(2, 10f) == false)
             {
                 transform.position += transform.up * _unit._speed * Time.deltaTime;
             }

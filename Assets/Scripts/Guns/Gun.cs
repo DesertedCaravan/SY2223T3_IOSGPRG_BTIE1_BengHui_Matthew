@@ -6,14 +6,12 @@ public enum GunType
 {
     Pistol,
     AutomaticRifle,
-    Shotgun
+    Shotgun,
+    GrenadeLauncher
 }
 
 public class Gun : MonoBehaviour
 {
-    [Header("Sounds")]
-    public AudioSource audioSource;
-
     [Header("Universal Variables")]
 
     // Reference: https://forum.unity.com/threads/rigidbody2d-addforce.493958/#:~:text=Code%20%28csharp%29%3A%20rigidbody2D.AddForce%20%28new%20Vector2%20%280f%2C,jumpForce%29%2C%20ForceMode2D.Impulse%29%3B%20to%20make%20character%20jump.
@@ -29,11 +27,6 @@ public class Gun : MonoBehaviour
     public int _enemyCount = 0;
     public bool _enemyFireOn = true;
     public bool _enemyReloadOn = false;
-
-    public void Start()
-    {
-        audioSource = GetComponent<AudioSource>();
-    }
 
     public virtual void Shoot()
     {

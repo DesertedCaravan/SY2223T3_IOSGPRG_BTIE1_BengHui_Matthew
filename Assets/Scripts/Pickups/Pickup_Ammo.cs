@@ -25,6 +25,11 @@ public class Pickup_Ammo : Pickup
             amount = Random.Range(1, 3);
             inventory.AddAmmo(3, amount);
         }
+        else if (_pickupType == PickupType.GrenadeLauncherAmmo)
+        {
+            amount = Random.Range(1, 3);
+            inventory.AddAmmo(4, amount);
+        }
 
         base.PickupItem(inventory, _pickupType);
     }

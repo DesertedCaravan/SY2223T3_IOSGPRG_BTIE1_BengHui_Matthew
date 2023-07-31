@@ -8,10 +8,12 @@ public class Inventory : Singleton<Inventory>
     [SerializeField] private int _maxPistolAmmoCarry = 90;
     [SerializeField] private int _maxAutomaticRifleAmmoCarry = 120;
     [SerializeField] private int _maxShotgunAmmoCarry = 90;
+    [SerializeField] private int _maxGrenadeLauncherAmmoCarry = 10;
 
     [SerializeField] private int _maxPistolClip = 15;
     [SerializeField] private int _maxAutomaticRifleClip = 30;
     [SerializeField] private int _maxShotgunClip = 2;
+    [SerializeField] private int _maxGrenadeLauncherClip = 1;
 
     [SerializeField] private int _maxHealthKitCarry = 3;
 
@@ -23,6 +25,7 @@ public class Inventory : Singleton<Inventory>
     public Gun _pistolSprite;
     public Gun _automaticRifleSprite;
     public Gun _shotgunSprite;
+    public Gun _grenadeLauncherSprite;
 
     public int _currentGun = 0;
 
@@ -30,6 +33,7 @@ public class Inventory : Singleton<Inventory>
     public int _pistolClip = 0;
     public int _automaticRifleClip = 0;
     public int _shotgunClip = 0;
+    public int _grenadeLauncherClip = 0;
 
     public bool _reloadState = false;
     public float _reloadTime = 3f;
@@ -39,11 +43,13 @@ public class Inventory : Singleton<Inventory>
     public int _pistolAmmoExcess = 0;
     public int _automaticRifleAmmoExcess = 0;
     public int _shotgunAmmoExcess = 0;
+    public int _grenadeLauncherAmmoExcess = 0;
 
     [Header("Total Carry Capacity")]
     public int _pistolAmmoCarry = 0;
     public int _automaticRifleAmmoCarry = 0;
     public int _shotgunAmmoCarry = 0;
+    public int _grenadeLauncherAmmoCarry = 0;
 
     public int _healthKitsCarry = 0;
 
@@ -68,6 +74,10 @@ public class Inventory : Singleton<Inventory>
                 else if (_equippedGun == _shotgunSprite)
                 {
                     ReloadGun(3);
+                }
+                else if (_equippedGun == _grenadeLauncherSprite)
+                {
+                    ReloadGun(4);
                 }
             }
         }
@@ -113,13 +123,23 @@ public class Inventory : Singleton<Inventory>
             _gun = 3;
             _sprite = _shotgunSprite;
         }
+        else if (gunType == 4)
+        {
+            _clip = _grenadeLauncherClip;
+            _maxClip = _maxGrenadeLauncherClip;
+            _ammoExcess = _grenadeLauncherAmmoExcess;
+            _ammoCarry = _grenadeLauncherAmmoCarry;
+            _maxAmmoCarry = _maxGrenadeLauncherAmmoCarry;
+            _gun = 4;
+            _sprite = _grenadeLauncherSprite;
+        }
 
         _ammoExcess += amount;
         _ammoExcess = Mathf.Min(_ammoExcess, _maxAmmoCarry - _clip);
 
         if (_clip == 0)
         {
-            if (_ammoExcess < 15)
+            if (_ammoExcess < _maxClip)
             {
                 _clip += _ammoExcess;
                 _ammoExcess -= _ammoExcess;
@@ -142,6 +162,10 @@ public class Inventory : Singleton<Inventory>
             {
                 _shotgunClip = _clip;
             }
+            else if (gunType == 4)
+            {
+                _grenadeLauncherClip = _clip;
+            }
 
             GameManager.Instance.SetClip(_gun, _clip);
         }
@@ -157,6 +181,10 @@ public class Inventory : Singleton<Inventory>
         else if (gunType == 3)
         {
             _shotgunAmmoExcess = _ammoExcess;
+        }
+        else if (gunType == 4)
+        {
+            _grenadeLauncherAmmoExcess = _ammoExcess;
         }
 
         GameManager.Instance.SetExcess(_gun, _ammoExcess);
@@ -191,6 +219,10 @@ public class Inventory : Singleton<Inventory>
         {
             _shotgunAmmoCarry = _ammoCarry;
         }
+        else if (gunType == 4)
+        {
+            _grenadeLauncherAmmoCarry = _ammoCarry;
+        }
 
         GameManager.Instance.SetAmmo(_gun, _ammoCarry);
     }
@@ -206,6 +238,10 @@ public class Inventory : Singleton<Inventory>
             return false;
         }
         else if (gunType == 3 && _shotgunClip <= 0)
+        {
+            return false;
+        }
+        else if (gunType == 4 && _grenadeLauncherClip <= 0)
         {
             return false;
         }
@@ -226,6 +262,10 @@ public class Inventory : Singleton<Inventory>
             return false;
         }
         else if (gunType == 3 && _shotgunAmmoCarry <= 0)
+        {
+            return false;
+        }
+        else if (gunType == 4 && _grenadeLauncherAmmoCarry <= 0)
         {
             return false;
         }
@@ -259,6 +299,12 @@ public class Inventory : Singleton<Inventory>
             _clip = _shotgunClip;
             _ammoCarry = _shotgunAmmoCarry;
         }
+        else if (gunType == 4)
+        {
+            _gun = 4;
+            _clip = _grenadeLauncherClip;
+            _ammoCarry = _grenadeLauncherAmmoCarry;
+        }
 
         _clip -= amount;
         _clip = Mathf.Max(0, _clip);
@@ -280,6 +326,11 @@ public class Inventory : Singleton<Inventory>
         {
             _shotgunClip = _clip;
             _shotgunAmmoCarry = _ammoCarry;
+        }
+        else if (gunType == 4)
+        {
+            _grenadeLauncherClip = _clip;
+            _grenadeLauncherAmmoCarry = _ammoCarry;
         }
 
         // Establish Clip in UI
@@ -303,9 +354,13 @@ public class Inventory : Singleton<Inventory>
         {
             return 3;
         }
-        else
+        else if (_equippedGun == _grenadeLauncherSprite)
         {
             return 4;
+        }
+        else
+        {
+            return 5;
         }
     }
 
@@ -333,6 +388,12 @@ public class Inventory : Singleton<Inventory>
             _ammoExcess = _shotgunAmmoExcess;
             _gun = 3;
         }
+        else if (gunType == 4)
+        {
+            _sprite = _grenadeLauncherSprite;
+            _ammoExcess = _grenadeLauncherAmmoExcess;
+            _gun = 4;
+        }
 
         _equippedGun = _sprite;
 
@@ -340,7 +401,7 @@ public class Inventory : Singleton<Inventory>
         {
             _secondaryGun = _sprite;
         }
-        else if (gunType == 2 || gunType == 3)
+        else if (gunType == 2 || gunType == 3 || gunType == 4)
         {
             _primaryGun = _sprite;
         }
@@ -350,7 +411,7 @@ public class Inventory : Singleton<Inventory>
         GameManager.Instance.SetExcess(_gun, _ammoExcess);
         GameManager.Instance.SetCurrentExcess(_gun);
 
-        UIManager.Instance.ActivateGun(gunType, _pistolSprite, _automaticRifleSprite, _shotgunSprite);
+        UIManager.Instance.ActivateGun(gunType, _pistolSprite, _automaticRifleSprite, _shotgunSprite, _grenadeLauncherSprite);
         UIManager.Instance.ActivateGunSprite(gunType);
     }
 
@@ -367,6 +428,10 @@ public class Inventory : Singleton<Inventory>
         else if (gunType == 3)
         {
             _reloadTime = 2.7f;
+        }
+        else if (gunType == 4)
+        {
+            _reloadTime = 2.3f;
         }
 
         _currentReloadTime = _reloadTime;
@@ -418,6 +483,15 @@ public class Inventory : Singleton<Inventory>
                 _gun = 3;
                 _sound = 6;
             }
+            else if (gunType == 4 && _grenadeLauncherAmmoCarry > 0)
+            {
+                _clip = _grenadeLauncherClip;
+                _ammoExcess = _grenadeLauncherAmmoExcess;
+                _ammoCarry = _grenadeLauncherAmmoCarry;
+                _maxClip = _maxGrenadeLauncherClip;
+                _gun = 4;
+                _sound = 8;
+            }
 
             if (_ammoCarry < _maxClip)
             {
@@ -444,6 +518,11 @@ public class Inventory : Singleton<Inventory>
             {
                 _shotgunAmmoExcess = _ammoExcess;
                 _shotgunClip = _clip;
+            }
+            else if (gunType == 4)
+            {
+                _grenadeLauncherAmmoExcess = _ammoExcess;
+                _grenadeLauncherClip = _clip;
             }
 
             _ammoExcess = Mathf.Max(0, _ammoExcess);
@@ -474,10 +553,15 @@ public class Inventory : Singleton<Inventory>
                 _gun = 2;
                 _sound = 4;
             }
-            else
+            else if (_equippedGun == _shotgunSprite)
             {
                 _gun = 3;
                 _sound = 6;
+            }
+            else if (_equippedGun == _grenadeLauncherSprite)
+            {
+                _gun = 4;
+                _sound = 8;
             }
         }
         else if (arm == 2)
@@ -493,7 +577,7 @@ public class Inventory : Singleton<Inventory>
 
         if ((_primaryGun != null && _secondaryGun != null) && _currentGun != _gun)
         {
-            UIManager.Instance.ActivateGun(_gun, _pistolSprite, _automaticRifleSprite, _shotgunSprite);
+            UIManager.Instance.ActivateGun(_gun, _pistolSprite, _automaticRifleSprite, _shotgunSprite, _grenadeLauncherSprite);
             GameManager.Instance.SetCurrentClip(_gun);
             GameManager.Instance.SetCurrentExcess(_gun);
 

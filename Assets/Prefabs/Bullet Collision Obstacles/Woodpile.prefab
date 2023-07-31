@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2362673724803087981}
   - component: {fileID: 433004378687303732}
   - component: {fileID: 6793540623298291335}
-  - component: {fileID: 4577225270542962727}
+  - component: {fileID: 4123476944747378200}
   m_Layer: 0
   m_Name: Woodpile
   m_TagString: Untagged
@@ -112,7 +112,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 5.12, y: 5.12}
   m_EdgeRadius: 0
---- !u!114 &4577225270542962727
+--- !u!114 &4123476944747378200
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -121,7 +121,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 527722758264171166}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee90f766e6b0db84aa3fec6774c53e0f, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b6d95450a2f4b0498e288f0bbb436ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _obstacleType: 0

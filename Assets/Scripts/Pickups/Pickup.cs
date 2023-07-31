@@ -7,9 +7,11 @@ public enum PickupType
     PistolGun,
     AutomaticRifleGun,
     ShotgunGun,
+    GrenadeLauncherGun,
     PistolAmmo,
     AutomaticRifleAmmo,
     ShotgunAmmo,
+    GrenadeLauncherAmmo,
     HealthKit
 }
 

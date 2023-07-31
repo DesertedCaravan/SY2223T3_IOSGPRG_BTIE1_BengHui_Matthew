@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class PickupSpawner : MonoBehaviour
 {
-    [SerializeField] private List<GameObject> _spawnGunsPrefabs;
-    [SerializeField] private List<GameObject> _spawnAmmoPrefabs;
-    [SerializeField] private GameObject _spawnMedkitPrefabs;
+    [SerializeField] public List<GameObject> _spawnGunsPrefabs;
+    [SerializeField] public List<GameObject> _spawnAmmoPrefabs;
+    [SerializeField] public GameObject _spawnMedkitPrefabs;
+    [SerializeField] public List<GameObject> _spawnBossDropsPrefabs;
 
     public virtual void Start()
     {
@@ -22,7 +23,7 @@ public class PickupSpawner : MonoBehaviour
         SpawnPickups(amount, 1);
     }
 
-    public void SpawnPickups(int count, int mode)
+    public virtual void SpawnPickups(int count, int mode)
     {
         float randomX = 0;
         float randomY = 0;
@@ -31,7 +32,7 @@ public class PickupSpawner : MonoBehaviour
 
         int rate;
 
-        GameObject chosenPrefab;
+        GameObject chosenPrefab = _spawnGunsPrefabs[0];
 
         for (int i = 0; i < count; i++)
         {
@@ -42,10 +43,10 @@ public class PickupSpawner : MonoBehaviour
             }
             else if (mode == 2)
             {
-                randomX = Random.Range(-5, 5);
-                randomY = Random.Range(-5, 5);
+                randomX = Random.Range(-2.5f, 2.5f);
+                randomY = Random.Range(-2.5f, 2.5f);
             }
-            
+
             position.x = gameObject.transform.position.x + randomX;
             position.y = gameObject.transform.position.y + randomY;
 
@@ -89,11 +90,37 @@ public class PickupSpawner : MonoBehaviour
 
             GameObject pickupGO = Instantiate(chosenPrefab, position, Quaternion.identity);
 
-            ChangeParent(pickupGO);
+            if (mode == 1)
+            {
+                ChangeParent(pickupGO);
+            }
         }
     }
 
-    public virtual void ChangeParent(GameObject pickup)
+    public void SpawnBossPickups(int count)
+    {
+        float randomX = 0;
+        float randomY = 0;
+        Vector3 position = new Vector3();
+        position.z = 0;
+
+        GameObject chosenPrefab;
+
+        for (int i = 0; i < count; i++)
+        {
+            randomX = Random.Range(-2.5f, 2.5f);
+            randomY = Random.Range(-2.5f, 2.5f);
+
+            position.x = gameObject.transform.position.x + randomX;
+            position.y = gameObject.transform.position.y + randomY;
+
+            chosenPrefab = _spawnBossDropsPrefabs[i];
+
+            GameObject pickupGO = Instantiate(chosenPrefab, position, Quaternion.identity);
+        }
+    }
+
+    public void ChangeParent(GameObject pickup)
     {
         pickup.transform.parent = transform;
     }

@@ -8,14 +8,19 @@ public class Sound : Singleton<Sound>
     public AudioSource playerSource;
     public AudioClip pickupItem;
 
-    public AudioClip pistolReload;
     public AudioClip pistolShoot;
+    public AudioClip pistolReload;
 
-    public AudioClip automaticRifleReload;
     public AudioClip automaticRifleShoot;
+    public AudioClip automaticRifleReload;
 
-    public AudioClip shotgunReload;
     public AudioClip shotgunShoot;
+    public AudioClip shotgunReload;
+
+    public AudioClip grenadeLauncherShoot;
+    public AudioClip grenadeLauncherReload;
+
+    public AudioClip grenadeLauncherExplosion;
 
     public AudioClip fullAmmo;
 
@@ -78,6 +83,14 @@ public class Sound : Singleton<Sound>
         {
             playerSource.PlayOneShot(shotgunReload);
         }
+        else if (type == 7)
+        {
+            playerSource.PlayOneShot(grenadeLauncherShoot);
+        }
+        else if (type == 8)
+        {
+            playerSource.PlayOneShot(grenadeLauncherReload);
+        }
     }
 
     public void FullAmmo()
@@ -111,6 +124,19 @@ public class Sound : Singleton<Sound>
         {
             AudioSource.PlayClipAtPoint(shotgunReload, enemyPosition.position, 30f);
         }
+        else if (type == 7)
+        {
+            AudioSource.PlayClipAtPoint(grenadeLauncherShoot, enemyPosition.position, 30f);
+        }
+        else if (type == 8)
+        {
+            AudioSource.PlayClipAtPoint(grenadeLauncherReload, enemyPosition.position, 30f);
+        }
+    }
+
+    public void GrenadeLauncherExplosion(Transform grenadePosition)
+    {
+        AudioSource.PlayClipAtPoint(grenadeLauncherExplosion, grenadePosition.position, 40f);
     }
 
     public void HurtPlayer()

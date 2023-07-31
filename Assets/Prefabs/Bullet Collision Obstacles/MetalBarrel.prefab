@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7242056812552089650}
   - component: {fileID: 37554995382802105}
   - component: {fileID: 6635209085843724498}
-  - component: {fileID: -7518864723098885711}
+  - component: {fileID: 7686696174741139386}
   m_Layer: 0
   m_Name: MetalBarrel
   m_TagString: Untagged
@@ -102,7 +102,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 1.92
---- !u!114 &-7518864723098885711
+--- !u!114 &7686696174741139386
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -111,7 +111,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1198940490557566333}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee90f766e6b0db84aa3fec6774c53e0f, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b6d95450a2f4b0498e288f0bbb436ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _obstacleType: 2

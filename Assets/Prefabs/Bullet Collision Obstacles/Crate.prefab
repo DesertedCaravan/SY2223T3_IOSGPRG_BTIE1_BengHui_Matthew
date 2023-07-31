@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6849346187867520221}
   - component: {fileID: 8336321894539408141}
   - component: {fileID: 6361720930398053050}
-  - component: {fileID: 5665573783733840082}
+  - component: {fileID: 1966708188029645254}
   m_Layer: 0
   m_Name: Crate
   m_TagString: Untagged
@@ -112,7 +112,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 3.84, y: 3.84}
   m_EdgeRadius: 0
---- !u!114 &5665573783733840082
+--- !u!114 &1966708188029645254
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -121,7 +121,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6333315111711590945}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee90f766e6b0db84aa3fec6774c53e0f, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b6d95450a2f4b0498e288f0bbb436ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _obstacleType: 0

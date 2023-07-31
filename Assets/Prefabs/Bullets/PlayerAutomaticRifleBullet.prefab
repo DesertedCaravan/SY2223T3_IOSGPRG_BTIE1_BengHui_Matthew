@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4107502851279842590}
   - component: {fileID: 1961193504083734638}
-  - component: {fileID: -5590694402697825360}
+  - component: {fileID: -2830052626209552423}
   - component: {fileID: 2617762376643674093}
-  - component: {fileID: 5587390834353264529}
+  - component: {fileID: -3108318743219819028}
   m_Layer: 0
   m_Name: PlayerAutomaticRifleBullet
   m_TagString: Untagged
@@ -87,7 +87,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-5590694402697825360
+--- !u!114 &-2830052626209552423
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -96,9 +96,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 8127017169710791813}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86870932f9b16514e84a47d757b5f8af, type: 3}
+  m_Script: {fileID: 11500000, guid: d6dd89e267b5e5f40839d76e8cc3d638, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _bulletType: 1
+  _playerExplosion: {fileID: 8127017169710791813, guid: ddad6515a36537245920b32d25d61a40, type: 3}
+  _enemyExplosion: {fileID: 8127017169710791813, guid: c07b8f83b0b18da46a58c68d25c71dbe, type: 3}
   _speed: 0
   _scatter: 0
   _rate: 0
@@ -119,7 +122,7 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 2}
   m_Direction: 0
---- !u!50 &5587390834353264529
+--- !u!50 &-3108318743219819028
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0

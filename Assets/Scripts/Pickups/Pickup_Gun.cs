@@ -21,6 +21,11 @@ public class Pickup_Gun : Pickup
             Sound.Instance.PlayerGun(6);
             inventory.AddGun(3);
         }
+        else if (_pickupType == PickupType.GrenadeLauncherGun)
+        {
+            Sound.Instance.PlayerGun(8);
+            inventory.AddGun(4);
+        }
 
         base.PickupItem(inventory, _pickupType);
     }
